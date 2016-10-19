@@ -36,7 +36,7 @@ OBJDIR	= ./obj/
 
 all: obj $(NAME)
 
-full: obj libft libgfx libmlx $(NAME)
+full: obj ft mlx gfx $(NAME)
 
 obj:
 	mkdir $(OBJDIR)
@@ -47,14 +47,14 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(FTLINK) $(GFXLINK) $(MLXLINK) -o $(NAME)
 
-libft:
-	make -C ./libft/
+ft:
+	cd ./libft && make re && cd ..
 
-libgfx:
-	make -C ./libgfx/
+gfx:
+	make -C ./libgfx re
 
-libmlx:
-	make -C ./minilibx/
+mlx:
+	make -C ./minilibx
 
 clean:
 	rm -rf $(OBJDIR)
@@ -74,9 +74,6 @@ rfclean: rclean
 	make -C ./libgfx fclean
 
 re: fclean all
-
-gfx:
-	make -C ./libgfx/ re
 
 f: gfx re
 	./$(NAME)

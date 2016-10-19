@@ -50,7 +50,6 @@ build:
 
 $(NAME): $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
-	@ranlib $(NAME)
 
 build/%.o: %.c libft.h | build
 	@gcc $(FLAGS) -c $< -o $@
