@@ -185,3 +185,24 @@ void			render_column(t_view *v, int x)
 	draw_floor(v, hit_side, y, points, wall_dist);
 	free_points(points);
 }
+
+
+void			draw_reload(t_view *view)
+{
+	int	x;
+
+	view->img = mlx_new_image(view->id, WIN_WIDTH + 100, WIN_HEIGHT + 100);
+	view->pixels = mlx_get_data_addr(view->img, &(view->bits_per_pixel),
+		&(view->size_line), &(view->endian));
+	x = -1;
+	while (++x < WIN_WIDTH)
+		render_column(view, x);
+	mlx_put_image_to_window(view->id, view->win, view->img, 0, 0);
+	mlx_destroy_image(view->id, view->img);
+}
+
+int				expose_hook(t_view *view)
+{
+	draw_reload(view);
+	return (0);
+}

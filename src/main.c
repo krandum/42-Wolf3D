@@ -115,11 +115,14 @@ int				main(void)
 	view->num_colors = 8;
 	printf("\t-Window created...\n");
 	gen_textures(view);
-	gen_map(view);
+	get_ready(view);
 	printf("\t-Textures initialized...\n");
 	mlx_expose_hook(view->win, expose_hook, view);
 	printf("\t-Window exposed...\n");
-	mlx_hook(view->win, 2, 3, key_hook, view);
+	mlx_hook(view->win, 2, 0, key_pressed_hook, view);
+	mlx_hook(view->win, 3, 0, key_released_hook, view);
+	mlx_do_key_autorepeatoff(view->id);
+	mlx_loop_hook(view->id, generic_hook, view);
 	printf("\t-Keyboard hooked...\n");
 	mlx_hook(view->win, 17, 0, exit_hook, view);
 	printf("Looping...\n");

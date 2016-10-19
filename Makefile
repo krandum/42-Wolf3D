@@ -12,7 +12,7 @@
 
 NAME	= wolf3d
 
-SRC		= main.c render.c hooks.c dungeon.c
+SRC		= main.c render.c key_hooks.c dungeon.c
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
 CC		= gcc
@@ -77,7 +77,7 @@ rfclean: rclean
 
 re: fclean all
 
-f: gfx re
+f: libgfx re
 	./$(NAME)
 
 regfx: gfx fclean all

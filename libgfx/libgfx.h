@@ -61,6 +61,8 @@ typedef struct		s_player
 	t_2dp			*pos;
 	t_2dp			*dir;
 	t_2dp			*cam;
+	double			mov_speed;
+	double			rot_speed;
 }					t_player;
 
 typedef struct		s_view
@@ -82,6 +84,8 @@ typedef struct		s_view
 	int				bits_per_pixel;
 	int				size_line;
 	int				endian;
+	clock_t			cur_time;
+	clock_t			old_time;
 }					t_view;
 
 void		ft_init_color_table(t_view *view);

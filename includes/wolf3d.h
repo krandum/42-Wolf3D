@@ -27,6 +27,8 @@
 # define KEY_STRAFE_L 12 //Q
 # define KEY_STRAFE_R 14 //E
 
+# define KEY_RUN 257 //SHIFT
+
 # define KEY_UP 126 //UP
 # define KEY_DOWN 125 //DOWN
 # define KEY_LEFT 123 //LEFT
@@ -38,7 +40,9 @@
 void			draw_reload(t_view *view);
 void			render_column(t_view *v, int x);
 int				expose_hook(t_view *view);
-int				key_hook(int keycode, t_view *view);
-void			gen_map(t_view *v);
+int				key_pressed_hook(int keycode, t_view *view);
+int				key_released_hook(int keycode, t_view *view);
+int				generic_hook(t_view *view);
+void			get_ready(t_view *view);
 
 #endif

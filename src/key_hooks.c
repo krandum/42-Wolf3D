@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
+/*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: palatorr <palatorr@student.42.us.or>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -21,28 +21,27 @@
 
 #define MAP(x, y) view->map[x][y]
 
-#define M_S (0.18)
-#define R_S (M_PI / 32.0)
+#define M_S (view->player->mov_speed)
+#define R_S (view->player->rot_speed)
 
-static void		key_hook_walk(int keycode, t_view *view)
+static void		key_hook_walk(t_view *view)
 {
 	double	temp;
 	int		sign;
 
-	if (keycode == KEY_FRONT || keycode == KEY_UP)
+	if (view->pressed->key_w)
 	{
 		P_PX += view->map[(int)(P_PX + P_DX * M_S)][(int)P_PY] ? 0 : P_DX * M_S;
 		P_PY += view->map[(int)P_PX][(int)(P_PY + P_DY * M_S)] ? 0 : P_DY * M_S;
 	}
-	else if (keycode == KEY_BACK || keycode == KEY_DOWN)
+	else if (view->pressed->key_s)
 	{
 		P_PX -= view->map[(int)(P_PX - P_DX * M_S)][(int)P_PY] ? 0 : P_DX * M_S;
 		P_PY -= view->map[(int)P_PX][(int)(P_PY - P_DY * M_S)] ? 0 : P_DY * M_S;
 	}
-	else if (keycode == KEY_TURN_R || keycode == KEY_TURN_L ||
-		keycode == KEY_LEFT || keycode == KEY_RIGHT)
+	if (view->pressed->key_a || view->pressed->key_d)
 	{
-		sign = keycode == KEY_TURN_R || keycode == KEY_RIGHT ? -1 : 1;
+		sign = view->pressed->key_d ? -1 : 1;
 		temp = P_DX;
 		P_DX = P_DX * cos(sign * R_S) - P_DY * sin(sign * R_S);
 		P_DY = temp * sin(sign * R_S) + P_DY * cos(sign * R_S);
@@ -52,19 +51,19 @@ static void		key_hook_walk(int keycode, t_view *view)
 	}
 }
 
-static void		key_hook_strafe(int keycode, t_view *view)
+static void		key_hook_strafe(t_view *view)
 {
 	double	tx;
 	double	ty;
 
-	if (keycode == KEY_STRAFE_L)
+	if (view->pressed->key_q)
 	{
 		tx = P_DX * cos(M_PI / 2.0) - P_DY * sin(M_PI / 2.0);
 		ty = P_DX * sin(M_PI / 2.0) + P_DY * cos(M_PI / 2.0);
 		P_PX += view->map[(int)(P_PX + tx * M_S)][(int)P_PY] ? 0 : tx * M_S;
 		P_PY += view->map[(int)P_PX][(int)(P_PY + ty * M_S)] ? 0 : ty * M_S;
 	}
-	else if (keycode == KEY_STRAFE_R)
+	else if (view->pressed->key_e)
 	{
 		tx = P_DX * cos(-M_PI / 2.0) - P_DY * sin(-M_PI / 2.0);
 		ty = P_DX * sin(-M_PI / 2.0) + P_DY * cos(-M_PI / 2.0);
@@ -73,35 +72,56 @@ static void		key_hook_strafe(int keycode, t_view *view)
 	}
 }
 
-void			draw_reload(t_view *view)
-{
-	int	x;
-
-	view->img = mlx_new_image(view->id, WIN_WIDTH + 100, WIN_HEIGHT + 100);
-	view->pixels = mlx_get_data_addr(view->img, &(view->bits_per_pixel),
-		&(view->size_line), &(view->endian));
-	x = -1;
-	while (++x < WIN_WIDTH)
-		render_column(view, x);
-	mlx_put_image_to_window(view->id, view->win, view->img, 0, 0);
-	mlx_destroy_image(view->id, view->img);
-}
-
-int				key_hook(int keycode, t_view *view)
+int				key_pressed_hook(int keycode, t_view *view)
 {
 	if (keycode == KEY_ESC)
 	{
 		mlx_destroy_window(view->id, view->win);
 		exit(0);
 	}
-	key_hook_walk(keycode, view);
-	key_hook_strafe(keycode, view);
-	draw_reload(view);
+	if (keycode == KEY_FRONT || keycode == KEY_UP)
+		view->pressed->key_w = 1;
+	else if (keycode == KEY_BACK || keycode == KEY_DOWN)
+		view->pressed->key_s = 1;
+	else if (keycode == KEY_TURN_L || keycode == KEY_LEFT)
+		view->pressed->key_a = 1;
+	else if (keycode == KEY_TURN_R || keycode == KEY_RIGHT)
+		view->pressed->key_d = 1;
+	else if (keycode == KEY_STRAFE_L)
+		view->pressed->key_q = 1;
+	else if (keycode == KEY_STRAFE_R)
+		view->pressed->key_e = 1;
 	return (0);
 }
 
-int				expose_hook(t_view *view)
+int				key_released_hook(int keycode, t_view *view)
 {
+	if (keycode == KEY_FRONT || keycode == KEY_UP)
+		view->pressed->key_w = 0;
+	else if (keycode == KEY_BACK || keycode == KEY_DOWN)
+		view->pressed->key_s = 0;
+	else if (keycode == KEY_TURN_L || keycode == KEY_LEFT)
+		view->pressed->key_a = 0;
+	else if (keycode == KEY_TURN_R || keycode == KEY_RIGHT)
+		view->pressed->key_d = 0;
+	else if (keycode == KEY_STRAFE_L)
+		view->pressed->key_q = 0;
+	else if (keycode == KEY_STRAFE_R)
+		view->pressed->key_e = 0;
+	return (0);
+}
+
+int				generic_hook(t_view *view)
+{
+	double	frame_time;
+
+	view->old_time = view->cur_time;
+	view->cur_time = clock();
+	frame_time = (view->cur_time - view->old_time) / 1000000.0;
+	view->player->mov_speed = frame_time * 5.0;
+	view->player->rot_speed = M_PI * frame_time;
+	key_hook_walk(view);
+	key_hook_strafe(view);
 	draw_reload(view);
 	return (0);
 }
