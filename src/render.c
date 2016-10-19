@@ -43,7 +43,7 @@ static void		init_points(t_view *v, int x, t_2dp *points[6])
 		(P_Y(2) + 1.0 - P_Y(0)) * P_Y(4));
 }
 
-static int	iter(t_view *v, t_2dp *points[6])
+static int		iter(t_view *v, t_2dp *points[6])
 {
 	int		hit_side;
 
@@ -68,6 +68,52 @@ static int	iter(t_view *v, t_2dp *points[6])
 	return (hit_side);
 }
 
+#define FL(x) ((int)(cur_floor[x] * T_SIZE) % T_SIZE)
+
+static void		draw_floor(t_view *v, int hit_side, int y[4], t_2dp *points[6],
+	double wall_dist)
+{
+	t_2dp	*floor_w;
+	double	cur_floor[2];
+	int		f_tex[2];
+	t_color	color;
+
+	floor_w = ft_get_2d_point(P_X(2), P_Y(2));
+	if (hit_side == 1 && P_X(1) > 0)
+		floor_w->y += P_X(3);
+	else if (hit_side == 1 && P_X(1) < 0)
+	{
+		floor_w->x += 1.0;
+		floor_w->y += P_X(3);
+	}
+	else if (hit_side == 2 && P_Y(1) > 0)
+		floor_w->x += P_X(3);
+	else
+	{
+		floor_w->x += P_X(3);
+		floor_w->y += 1.0;
+	}
+	y[2] = y[2] < 0 ? WIN_HEIGHT : y[2];
+	while (++y[2] < WIN_HEIGHT)
+	{
+		double weight = v->tab[y[2]] / wall_dist;
+		cur_floor[0] = weight * floor_w->x + (1.0 - weight) *
+			v->player->pos->x;
+		cur_floor[1] = weight * floor_w->y + (1.0 - weight) *
+			v->player->pos->y;
+		f_tex[0] = FL(0);
+		f_tex[1] = FL(1);
+		color = v->textures[78][(int)(T_SIZE * f_tex[1] + f_tex[0])];
+		v->pixels[y[2] * v->size_line + (y[3] * 4)] = color;
+		v->pixels[y[2] * v->size_line + (y[3] * 4) + 1] = color >> 8;
+		v->pixels[y[2] * v->size_line + (y[3] * 4) + 2] = color >> 16;
+		color = v->textures[2][(int)(T_SIZE * f_tex[1] + f_tex[0])];
+		v->pixels[(WIN_HEIGHT - y[2] - 1) * v->size_line + (y[3] * 4)] = color;
+		v->pixels[(WIN_HEIGHT - y[2] - 1) * v->size_line + (y[3] * 4) + 1] = color >> 8;
+		v->pixels[(WIN_HEIGHT - y[2] - 1) * v->size_line + (y[3] * 4) + 2] = color >> 16;
+	}
+}
+
 static void		draw_stripe(t_view *v, int y[4], int tex[3], int hit_side)
 {
 	int		iy;
@@ -79,7 +125,7 @@ static void		draw_stripe(t_view *v, int y[4], int tex[3], int hit_side)
 	{
 		d = iy * 0x100 - WIN_HEIGHT * 0x80 + y[0] * 0x80;
 		tex[2] = ((d * T_SIZE) / y[0]) / 0x100;
-		color = v->textures[tex[0]][T_SIZE * tex[1] + tex[2]];
+		color = v->textures[tex[0]][T_SIZE * tex[2] + tex[1]];
 		color = hit_side == 2 ? (color >> 1) & 0x7F7F7F : color;
 		v->pixels[iy * v->size_line + (y[3] * 4)] = color;
 		v->pixels[iy * v->size_line + (y[3] * 4) + 1] = color >> 8;
@@ -108,7 +154,7 @@ static void		draw_stripe(t_view *v, int y[4], int tex[3], int hit_side)
 **	to look at.
 */
 
-static void		render_column(t_view *v, int x)
+void			render_column(t_view *v, int x)
 {
 	t_2dp	*points[6];
 	double	wall_dist;
@@ -136,19 +182,6 @@ static void		render_column(t_view *v, int x)
 	if ((hit_side == 1 && P_X(1) > 0) || (hit_side == 2 && P_Y(1) < 0))
 		tex[1] = T_SIZE - tex[1] - 1;
 	draw_stripe(v, y, tex, hit_side);
+	draw_floor(v, hit_side, y, points, wall_dist);
 	free_points(points);
-}
-
-void			draw_reload(t_view *view)
-{
-	int	x;
-
-	view->img = mlx_new_image(view->id, WIN_WIDTH + 100, WIN_HEIGHT + 100);
-	view->pixels = mlx_get_data_addr(view->img, &(view->bits_per_pixel),
-		&(view->size_line), &(view->endian));
-	x = -1;
-	while (++x < WIN_WIDTH)
-		render_column(view, x);
-	mlx_put_image_to_window(view->id, view->win, view->img, 0, 0);
-	mlx_destroy_image(view->id, view->img);
 }

@@ -22,7 +22,7 @@
 #define MAP(x, y) view->map[x][y]
 
 #define M_S (0.18)
-#define	R_S (M_PI / 32.0)
+#define R_S (M_PI / 32.0)
 
 static void		key_hook_walk(int keycode, t_view *view)
 {
@@ -71,6 +71,20 @@ static void		key_hook_strafe(int keycode, t_view *view)
 		P_PX += view->map[(int)(P_PX + tx * M_S)][(int)P_PY] ? 0 : tx * M_S;
 		P_PY += view->map[(int)P_PX][(int)(P_PY + ty * M_S)] ? 0 : ty * M_S;
 	}
+}
+
+void			draw_reload(t_view *view)
+{
+	int	x;
+
+	view->img = mlx_new_image(view->id, WIN_WIDTH + 100, WIN_HEIGHT + 100);
+	view->pixels = mlx_get_data_addr(view->img, &(view->bits_per_pixel),
+		&(view->size_line), &(view->endian));
+	x = -1;
+	while (++x < WIN_WIDTH)
+		render_column(view, x);
+	mlx_put_image_to_window(view->id, view->win, view->img, 0, 0);
+	mlx_destroy_image(view->id, view->img);
 }
 
 int				key_hook(int keycode, t_view *view)

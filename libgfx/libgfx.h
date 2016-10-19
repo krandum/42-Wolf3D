@@ -16,50 +16,76 @@
 # include "libft.h"
 # include "mlx.h"
 # include "math.h"
+# include "time.h"
 
-# define WIN_WIDTH 1600
-# define WIN_HEIGHT 1200
 
-# define T_SIZE 64
+# include <stdio.h>
+
+
+# define WIN_WIDTH 1200
+# define WIN_HEIGHT 900
+
+# define T_SIZE 32
+# define T_FILE "textures/sheet.bmp"
 
 # define W_W WIN_WIDTH
 # define W_H WIN_HEIGHT
 
-typedef int		t_color;
+typedef int			t_color;
 
-typedef struct	s_2dp
+typedef struct		s_2dp
+{
+	float			x;
+	float			y;
+}					t_2dp;
+
+typedef struct	s_3dp
 {
 	float	x;
 	float	y;
-}				t_2dp;
+	float	z;
+}				t_3dp;
 
-typedef struct	s_player
+typedef struct	s_keys
 {
-	t_2dp		*pos;
-	t_2dp		*dir;
-	t_2dp		*cam;
-}				t_player;
+	uint8_t	key_w:1;
+	uint8_t	key_a:1;
+	uint8_t	key_s:1;
+	uint8_t	key_d:1;
+	uint8_t	key_q:1;
+	uint8_t	key_e:1;
+}				t_keys;
 
-typedef struct	s_view
+typedef struct		s_player
 {
-	void		*id;
-	void		*win;
-	void		*img;
-	t_player	*player;
-	char		*pixels;
-	t_color		**textures;
-	t_color		*colors;
-	char		**map;
-	double		y_shift;
-	int			num_colors;
-	int			width;
-	int			height;
-	int			bits_per_pixel;
-	int			size_line;
-	int			endian;
-}				t_view;
+	t_2dp			*pos;
+	t_2dp			*dir;
+	t_2dp			*cam;
+}					t_player;
 
-void		ft_init_color_table(t_view *view, int colors);
+typedef struct		s_view
+{
+	void			*id;
+	void			*win;
+	void			*img;
+	t_player		*player;
+	t_keys			*pressed;
+	char			*pixels;
+	unsigned char	*texture_data;
+	t_color			**textures;
+	t_color			*colors;
+	double			*tab;
+	char			**map;
+	int				width;
+	int				height;
+	int				num_colors;
+	int				bits_per_pixel;
+	int				size_line;
+	int				endian;
+}					t_view;
+
+void		ft_init_color_table(t_view *view);
+t_color		*ft_get_texture(t_view *v, int offset);
 t_2dp		*ft_get_2d_point(float x, float y);
 void		ft_color_pixel(t_view *v, int x, int y, int iter);
 

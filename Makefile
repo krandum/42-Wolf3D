@@ -12,7 +12,7 @@
 
 NAME	= wolf3d
 
-SRC		= main.c render.c hooks.c
+SRC		= main.c render.c hooks.c dungeon.c
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
 CC		= gcc
@@ -48,21 +48,12 @@ $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(FTLINK) $(GFXLINK) $(MLXLINK) -o $(NAME)
 
 libft:
-	$(LIBFT)
-
-libgfx:
-	$(LIBGFX)
-
-libmlx:
-	$(LIBMLX)
-
-$(LIBFT):
 	make -C ./libft/
 
-$(LIBGFX):
-	make -C ./libg/
+libgfx:
+	make -C ./libgfx/
 
-$(LIBMLX):
+libmlx:
 	make -C ./minilibx/
 
 clean:
@@ -70,22 +61,25 @@ clean:
 
 rclean:
 	rm -rf $(OBJDIR)
-	make -C ./libft/ clean
-	make -C ./libgfx/ clean
-	make -C ./minilibx/ clean
+	make -C ./libft clean
+	make -C ./libgfx clean
+	make -C ./minilibx clean
 
 fclean: clean
 	rm -rf $(NAME)
 
 rfclean: rclean
 	rm -rf $(NAME)
-	make -C ./libft/ fclean
-	make -C ./libgfx/ fclean
+	make -C ./libft fclean
+	make -C ./libgfx fclean
 
 re: fclean all
 
 gfx:
 	make -C ./libgfx/ re
+
+f: gfx re
+	./$(NAME)
 
 regfx: gfx fclean all
 

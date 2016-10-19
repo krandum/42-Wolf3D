@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-FILENAMES	= colors.c
+FILENAMES	= colors.c vector.c
 
 NAME		= libgfx.a
 
