@@ -34,9 +34,11 @@ SRCDIR	= ./src/
 INCDIR	= ./includes/
 OBJDIR	= ./obj/
 
+.PHONY: full libft libmlx libgfx regfx re clean rclean fclean rfclean
+
 all: obj $(NAME)
 
-full: obj ft mlx gfx $(NAME)
+full: obj libft libgfx libmlx $(NAME)
 
 obj:
 	mkdir $(OBJDIR)
@@ -47,14 +49,14 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(FTLINK) $(GFXLINK) $(MLXLINK) -o $(NAME)
 
-ft:
-	cd ./libft && make re && cd ..
+libft:
+	make -C ./libft re
 
-gfx:
+libgfx:
 	make -C ./libgfx re
 
-mlx:
-	make -C ./minilibx
+libmlx:
+	make -C ./minilibx re
 
 clean:
 	rm -rf $(OBJDIR)
