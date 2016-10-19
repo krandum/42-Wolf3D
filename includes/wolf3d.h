@@ -35,16 +35,6 @@
 # define MAP_WIDTH 51
 # define MAP_HEIGHT 51
 
-typedef struct	s_keys
-{
-	uint8_t	key_w:1;
-	uint8_t	key_a:1;
-	uint8_t	key_s:1;
-	uint8_t	key_d:1;
-	uint8_t	key_q:1;
-	uint8_t	key_e:1;
-}				t_keys;
-
 void			draw_reload(t_view *view);
 void			render_column(t_view *v, int x);
 int				expose_hook(t_view *view);
