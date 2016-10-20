@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-void		get_ready(t_view *v)
+static void	get_ready(t_view *v)
 {
 	int	y;
 	int	x;
@@ -29,13 +29,12 @@ void		get_ready(t_view *v)
 	y = -1;
 	while (++y < WIN_HEIGHT)
 		v->tab[y] = WIN_HEIGHT / (2.0 * y - WIN_HEIGHT);
-	v->pressed = (t_keys*)malloc(sizeof(t_keys));
-	v->pressed->key_w = 0;
-	v->pressed->key_s = 0;
-	v->pressed->key_a = 0;
-	v->pressed->key_d = 0;
-	v->pressed->key_q = 0;
-	v->pressed->key_e = 0;
+	v->pressed = (t_keys*)ft_memalloc(sizeof(t_keys));
 	v->cur_time = 0;
 	v->old_time = 0;
+}
+
+void		gen_dungeon(t_view *view)
+{
+	get_ready(view);
 }

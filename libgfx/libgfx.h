@@ -9,7 +9,7 @@
 /*   Updated: 2016/10/10 17:01:41 by palatorr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+ 
 #ifndef LIBGFX_H
 # define LIBGFX_H
 
@@ -54,6 +54,7 @@ typedef struct	s_keys
 	uint8_t	key_d:1;
 	uint8_t	key_q:1;
 	uint8_t	key_e:1;
+	uint8_t	key_sh:1;
 }				t_keys;
 
 typedef struct		s_player
@@ -84,12 +85,12 @@ typedef struct		s_view
 	int				bits_per_pixel;
 	int				size_line;
 	int				endian;
-	clock_t			cur_time;
-	clock_t			old_time;
+	long			cur_time;
+	long			old_time;
 }					t_view;
 
-void		ft_init_color_table(t_view *view);
 t_color		*ft_get_texture(t_view *v, int offset);
+void		ft_get_time(struct timespec *ts);
 t_2dp		*ft_get_2d_point(float x, float y);
 void		ft_color_pixel(t_view *v, int x, int y, int iter);
 

@@ -16,27 +16,6 @@
 **	Not portable, numbers are specific to the sprite sheet.
 */
 
-/*void		ft_init_color_table(t_view *v)
-{
-	int		offset;
-	int		i;
-	uint8_t	red;
-	uint8_t	green;
-	uint8_t	blue;
-
-	v->colors = (t_color*)ft_memalloc(sizeof(t_color) * v->num_colors);
-	offset = 0;
-	i = 0;
-	while (offset < 0x154)
-	{
-		blue = v->texture_data[offset];
-		green = v->texture_data[++offset];
-		red = v->texture_data[++offset];
-		v->colors[i++] = ((int)red) << 16 | ((int)green) << 8 | blue;
-		offset += 2;
-	}
-}*/
-
 t_color		*ft_get_texture(t_view *v, int offset)
 {
 	t_color	*out;

@@ -105,7 +105,7 @@ int				main(void)
 	view = (t_view*)malloc(sizeof(t_view));
 	printf("LOADING...\n");
 	view->player = (t_player*)malloc(sizeof(t_player));
-	view->player->pos = ft_get_2d_point(24.5, 25.5);
+	view->player->pos = ft_get_2d_point(24.501, 25.501);
 	view->player->dir = ft_get_2d_point(1.0, 0.0);
 	view->player->cam = ft_get_2d_point(0.0, -0.6666666);
 	printf("\t-Player coordinates set...\n");
@@ -115,7 +115,7 @@ int				main(void)
 	view->num_colors = 8;
 	printf("\t-Window created...\n");
 	gen_textures(view);
-	get_ready(view);
+	gen_dungeon(view);
 	printf("\t-Textures initialized...\n");
 	mlx_expose_hook(view->win, expose_hook, view);
 	printf("\t-Window exposed...\n");

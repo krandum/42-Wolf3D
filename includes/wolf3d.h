@@ -13,10 +13,17 @@
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
-#include "libft.h"
-#include "mlx.h"
-#include "libgfx.h"
-#include <fcntl.h>
+# include "libft.h"
+# include "mlx.h"
+# include "libgfx.h"
+# include <fcntl.h>
+# include <sys/time.h>
+
+# ifdef __MACH__
+#  include <mach/clock.h>
+#  include <mach/mach.h>
+# endif
+
 
 # define KEY_ESC 53
 
@@ -43,6 +50,7 @@ int				expose_hook(t_view *view);
 int				key_pressed_hook(int keycode, t_view *view);
 int				key_released_hook(int keycode, t_view *view);
 int				generic_hook(t_view *view);
-void			get_ready(t_view *view);
+void			gen_dungeon(t_view *view);
+
 
 #endif
