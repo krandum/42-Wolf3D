@@ -26,8 +26,8 @@
 # include <stdio.h>
 
 
-# define WIN_WIDTH 1200
-# define WIN_HEIGHT 900
+# define WIN_WIDTH 800
+# define WIN_HEIGHT 600
 
 # define T_SIZE 32
 # define T_FILE "textures/sheet.bmp"

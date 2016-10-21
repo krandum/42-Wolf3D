@@ -125,20 +125,19 @@ static void		darken_wall(t_view *v, t_render *r)
 
 static void		draw_stripe(t_view *v, t_render *r)
 {
-	int		iy;
 	int		d;
 
-	iy = r->drawstart - 1;
-	while (++iy < r->drawend)
+	r->y = r->drawstart - 1;
+	while (++r->y < r->drawend)
 	{
-		d = iy * 0x100 - WIN_HEIGHT * 0x80 + r->lineheight * 0x80;
+		d = r->y * 0x100 - WIN_HEIGHT * 0x80 + r->lineheight * 0x80;
 		r->texy = ((d * T_SIZE) / r->lineheight) / 0x100;
 		r->color = v->textures[r->texnum][T_SIZE * r->texy + r->texx];
 		r->color = r->side == 1 ? (r->color >> 1) & 0x7F7F7F : r->color;
 		darken_wall(v, r);
-		v->pixels[iy * v->size_line + (r->x * 4)] = r->color;
-		v->pixels[iy * v->size_line + (r->x * 4) + 1] = r->color >> 8;
-		v->pixels[iy * v->size_line + (r->x * 4) + 2] = r->color >> 16;
+		v->pixels[r->y * v->size_line + (r->x * 4)] = r->color;
+		v->pixels[r->y * v->size_line + (r->x * 4) + 1] = r->color >> 8;
+		v->pixels[r->y * v->size_line + (r->x * 4) + 2] = r->color >> 16;
 	}
 }
 

@@ -94,7 +94,11 @@ int				key_pressed_hook(int keycode, t_view *view)
 	else if (keycode == KEY_STRAFE_R)
 		view->pressed->key_e = 1;
 	else if (keycode == KEY_RUN)
+	{
 		view->pressed->key_sh = 1;
+		view->player->cam->x *= 1.06666;
+		view->player->cam->y *= 1.06666;
+	}
 	return (0);
 }
 
@@ -113,7 +117,11 @@ int				key_released_hook(int keycode, t_view *view)
 	else if (keycode == KEY_STRAFE_R)
 		view->pressed->key_e = 0;
 	else if (keycode == KEY_RUN)
+	{
 		view->pressed->key_sh = 0;
+		view->player->cam->x *= 0.9375;
+		view->player->cam->y *= 0.9375;
+	}
 	return (0);
 }
 
