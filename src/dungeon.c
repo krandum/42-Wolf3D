@@ -34,10 +34,10 @@ static int		check_space(t_view *v, t_point *p0, t_point *p1)
 	if (p0->c > WIN_WIDTH || p1->c > WIN_WIDTH || p1->c < 0 || p0->c < 0)
 		return (0);
 	r = p0->r;
-	while (r < p1->r)
+	while (r <= p1->r)
 	{
 		c = p0->c;
-		while (c < p1->c)
+		while (c <= p1->c)
 		{
 			if (v->map[r][c] != 0)
 				return (0);
@@ -186,6 +186,7 @@ static void		get_ready(t_view *v)
 
 	y = -1;
 	v->tab = (double*)ft_memalloc(sizeof(double) * WIN_HEIGHT);
+	v->darkness = (double*)ft_memalloc(sizeof(double) * WIN_HEIGHT);
 	v->map = (char**)ft_memalloc(sizeof(char*) * MAP_HEIGHT);
 	while (++y < MAP_HEIGHT)
 	{
@@ -197,10 +198,12 @@ static void		get_ready(t_view *v)
 	}
 	y = -1;
 	while (++y < WIN_HEIGHT)
+	{
 		v->tab[y] = WIN_HEIGHT / (2.0 * y - WIN_HEIGHT);
+		v->darkness[y] = MAX(0, MIN(1, (double)y / (double)WIN_HEIGHT));
+	}
 	v->pressed = (t_keys*)ft_memalloc(sizeof(t_keys));
 	v->cur_time = 0;
-	v->old_time = 0;
 	make_starting_room(v);
 	srand(time(NULL));
 }

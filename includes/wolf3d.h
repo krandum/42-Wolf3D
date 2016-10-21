@@ -52,8 +52,41 @@ typedef struct	s_point
 	int	c;
 }				t_point;
 
+typedef struct	s_render
+{
+	double	rayposx;
+	double	rayposy;
+	double	raydirx;
+	double	raydiry;
+	int		mapx;
+	int		mapy;
+	double	sidedistx;
+	double	sidedisty;
+	double	deltadistx;
+	double	deltadisty;
+	int		stepx;
+	int		stepy;
+	int		x;
+	int		y;
+	double	walldist;
+	int		lineheight;
+	int		drawstart;
+	int		drawend;
+	int		hit;
+	int		side;
+	double	camx;
+	int		texnum;
+	double	wallx;
+	int		texx;
+	int		texy;
+	float	red;
+	float	green;
+	float	blue;
+	t_color	color;
+}				t_render;
+
 void			draw_reload(t_view *view);
-void			render_column(t_view *v, int x);
+void			render_column(t_view *v, t_render *r);
 int				expose_hook(t_view *view);
 int				key_pressed_hook(int keycode, t_view *view);
 int				key_released_hook(int keycode, t_view *view);

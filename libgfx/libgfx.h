@@ -82,6 +82,7 @@ typedef struct		s_view
 	t_color			**textures;
 	t_color			*colors;
 	double			*tab;
+	double			*darkness;
 	char			**map;
 	int				width;
 	int				height;
