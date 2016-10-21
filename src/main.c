@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-char	*g_world_map[51] =
+/*char	*g_world_map[51] =
 {
 	"888888888888888888888888888888888888888888888888888",
 	"800000000000000000000000000000000000000000000000008",
@@ -65,7 +65,7 @@ char	*g_world_map[51] =
 	"800000000000000000000000000000000000000000000000008",
 	"800000000000000000000000000000000000000000000000008",
 	"888888888888888888888888888888888888888888888888888"
-};
+};*/
 
 /*
 **	Doesn't actually work for any given sprite sheet right now.
@@ -105,14 +105,13 @@ int				main(void)
 	view = (t_view*)malloc(sizeof(t_view));
 	printf("LOADING...\n");
 	view->player = (t_player*)malloc(sizeof(t_player));
-	view->player->pos = ft_get_2d_point(24.501, 25.501);
+	view->player->pos = ft_get_2d_point(MAP_HEIGHT / 2 + 0.01,
+		MAP_WIDTH / 2 + 0.01);
 	view->player->dir = ft_get_2d_point(1.0, 0.0);
 	view->player->cam = ft_get_2d_point(0.0, -0.6666666);
 	printf("\t-Player coordinates set...\n");
 	view->id = mlx_init();
 	view->win = mlx_new_window(view->id, WIN_WIDTH, WIN_HEIGHT, "42-Wolf 3D");
-	view->map = g_world_map;
-	view->num_colors = 8;
 	printf("\t-Window created...\n");
 	gen_textures(view);
 	gen_dungeon(view);

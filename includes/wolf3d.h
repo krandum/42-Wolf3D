@@ -19,12 +19,6 @@
 # include <fcntl.h>
 # include <sys/time.h>
 
-# ifdef __MACH__
-#  include <mach/clock.h>
-#  include <mach/mach.h>
-# endif
-
-
 # define KEY_ESC 53
 
 # define KEY_FRONT 13 //W
@@ -41,8 +35,22 @@
 # define KEY_LEFT 123 //LEFT
 # define KEY_RIGHT 124 //RIGHT
 
-# define MAP_WIDTH 51
-# define MAP_HEIGHT 51
+# define MAP_WIDTH 130
+# define MAP_HEIGHT 130
+
+# define BUILD_NUM 80
+# define ACCESS_NUM 36
+# define ROOM_DEN 65
+# define ROOM_MIN 6
+# define ROOM_MAX 10
+# define CORR_MIN 8
+# define CORR_MAX 12
+
+typedef struct	s_point
+{
+	int	r;
+	int	c;
+}				t_point;
 
 void			draw_reload(t_view *view);
 void			render_column(t_view *v, int x);
