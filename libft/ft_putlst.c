@@ -17,7 +17,7 @@ static void	putelem(t_list *elem)
 	ft_putstr((char*)elem->content);
 }
 
-void	ft_putlst(t_list *head, const char *d)
+void		ft_putlst(t_list *head, const char *d)
 {
 	t_list	*cur;
 

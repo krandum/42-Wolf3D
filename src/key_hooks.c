@@ -41,7 +41,7 @@ static void		key_hook_walk(t_view *view)
 	}
 	if (view->pressed->key_a || view->pressed->key_d)
 	{
-		sign = view->pressed->key_d? -1 : 1;
+		sign = view->pressed->key_d ? -1 : 1;
 		if (sign == -1 && view->pressed->key_a)
 			return ;
 		temp = P_DX;
@@ -77,10 +77,7 @@ static void		key_hook_strafe(t_view *view)
 int				key_pressed_hook(int keycode, t_view *view)
 {
 	if (keycode == KEY_ESC)
-	{
-		mlx_destroy_window(view->id, view->win);
-		exit(0);
-	}
+		exit_hook(view);
 	if (keycode == KEY_FRONT || keycode == KEY_UP)
 		view->pressed->key_w = 1;
 	else if (keycode == KEY_BACK || keycode == KEY_DOWN)
@@ -94,8 +91,11 @@ int				key_pressed_hook(int keycode, t_view *view)
 	else if (keycode == KEY_STRAFE_R)
 		view->pressed->key_e = 1;
 	else if (keycode == KEY_RUN)
-	{
 		view->pressed->key_sh = 1;
+	if (!view->pressed->running && view->pressed->key_sh &&
+		view->pressed->key_w)
+	{
+		view->pressed->running = 1;
 		view->player->cam->x *= 1.06666;
 		view->player->cam->y *= 1.06666;
 	}
@@ -117,8 +117,11 @@ int				key_released_hook(int keycode, t_view *view)
 	else if (keycode == KEY_STRAFE_R)
 		view->pressed->key_e = 0;
 	else if (keycode == KEY_RUN)
-	{
 		view->pressed->key_sh = 0;
+	if (view->pressed->running && (keycode == KEY_RUN || keycode == KEY_FRONT ||
+		keycode == KEY_UP))
+	{
+		view->pressed->running = 0;
 		view->player->cam->x *= 0.9375;
 		view->player->cam->y *= 0.9375;
 	}

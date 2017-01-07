@@ -12,14 +12,8 @@
 
 #include "libgfx.h"
 
-# ifdef __MACH__
-#  include <mach/clock.h>
-#  include <mach/mach.h>
-# endif
-
 void	ft_get_time(struct timespec *ts)
 {
-#ifdef __MACH__
 	clock_serv_t	cclock;
 	mach_timespec_t	mts;
 
@@ -28,7 +22,4 @@ void	ft_get_time(struct timespec *ts)
 	mach_port_deallocate(mach_task_self(), cclock);
 	ts->tv_sec = mts.tv_sec;
 	ts->tv_nsec = mts.tv_nsec;
-#else
-	clock_gettime(CLOCK_REALTIME, ts);
-#endif
 }

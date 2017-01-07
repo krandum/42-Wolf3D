@@ -21,29 +21,29 @@
 
 # define KEY_ESC 53
 
-# define KEY_FRONT 13 //W
-# define KEY_BACK 1 //S
-# define KEY_TURN_L 0 //A
-# define KEY_TURN_R 2 //D
-# define KEY_STRAFE_L 12 //Q
-# define KEY_STRAFE_R 14 //E
+# define KEY_FRONT 13
+# define KEY_BACK 1
+# define KEY_TURN_L 0
+# define KEY_TURN_R 2
+# define KEY_STRAFE_L 12
+# define KEY_STRAFE_R 14
 
-# define KEY_RUN 257 //SHIFT
+# define KEY_RUN 257
 
-# define KEY_UP 126 //UP
-# define KEY_DOWN 125 //DOWN
-# define KEY_LEFT 123 //LEFT
-# define KEY_RIGHT 124 //RIGHT
+# define KEY_UP 126
+# define KEY_DOWN 125
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
 
-# define MAP_WIDTH 130
-# define MAP_HEIGHT 130
+# define MAP_WIDTH 150
+# define MAP_HEIGHT 150
 
-# define BUILD_NUM 80
+# define BUILD_NUM 90
 # define ACCESS_NUM 36
 # define ROOM_DEN 65
-# define ROOM_MIN 6
-# define ROOM_MAX 10
-# define CORR_MIN 8
+# define ROOM_MIN 7
+# define ROOM_MAX 14
+# define CORR_MIN 6
 # define CORR_MAX 12
 
 typedef struct	s_point
@@ -52,46 +52,25 @@ typedef struct	s_point
 	int	c;
 }				t_point;
 
-typedef struct	s_render
-{
-	double	rayposx;
-	double	rayposy;
-	double	raydirx;
-	double	raydiry;
-	int		mapx;
-	int		mapy;
-	double	sidedistx;
-	double	sidedisty;
-	double	deltadistx;
-	double	deltadisty;
-	int		stepx;
-	int		stepy;
-	int		x;
-	int		y;
-	double	walldist;
-	int		lineheight;
-	int		drawstart;
-	int		drawend;
-	int		hit;
-	int		side;
-	double	camx;
-	int		texnum;
-	double	wallx;
-	int		texx;
-	int		texy;
-	float	red;
-	float	green;
-	float	blue;
-	t_color	color;
-}				t_render;
-
 void			draw_reload(t_view *view);
 void			render_column(t_view *v, t_render *r);
+void			iter(t_view *v, t_render *r);
+void			init_points(t_view *v, t_render *r);
+void			draw_floor(t_view *v, t_render *r, t_2dp *floor_w,
+	double weight);
 int				expose_hook(t_view *view);
+int				exit_hook(t_view *view);
 int				key_pressed_hook(int keycode, t_view *view);
 int				key_released_hook(int keycode, t_view *view);
 int				generic_hook(t_view *view);
 void			gen_dungeon(t_view *view);
-
+void			make_starting_room(t_view *v);
+int				gen_room(t_view *v, t_point *l);
+int				gen_corr(t_view *v, t_point *l);
+int				check_space(t_view *v, t_point *p0, t_point *p1);
+int				find_dir(t_view *v, t_point *loc);
+t_point			*get_point(int r, int c);
+void			map_error(void);
+void			double_free(t_point *p0, t_point *p1);
 
 #endif

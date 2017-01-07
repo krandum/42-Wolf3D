@@ -25,7 +25,7 @@ static void	del_tab(char **tab)
 	free(tab);
 }
 
-char	**ft_tabdup(const char **tab)
+char		**ft_tabdup(const char **tab)
 {
 	char	**out;
 	size_t	len;

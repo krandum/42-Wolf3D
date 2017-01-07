@@ -12,7 +12,7 @@
 
 NAME	= wolf3d
 
-SRC		= main.c render.c key_hooks.c dungeon.c
+SRC		= main.c render.c key_hooks.c dungeon.c draw.c rooms.c gen_util.c
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
 CC		= gcc

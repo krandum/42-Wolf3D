@@ -67,7 +67,7 @@ static int	set_endl(t_pack *pack)
 }
 
 /*
-**	In this assignment I learned to use the address to compare positions of 
+**	In this assignment I learned to use the address to compare positions of
 **	characters in strings. Has what is essentially an ABORT condition which
 **	will free everything.
 */
@@ -95,7 +95,8 @@ static int	shameless_split(t_pack **ppack, t_pack *pack, char **line)
 /*
 **	Sets my pack structure, checks for parameter errors
 */
-int		ft_get_next_line(const int fd, char **line)
+
+int			ft_get_next_line(const int fd, char **line)
 {
 	static t_pack	*packs[MAX_PACKS];
 

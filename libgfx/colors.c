@@ -24,7 +24,7 @@ t_color		*ft_get_texture(t_view *v, int offset)
 	uint8_t	blue;
 	int		i;
 
-	out = (t_color*)malloc(sizeof(t_color) * T_SIZE * T_SIZE);
+	out = (t_color*)malloc(sizeof(t_color) * (T_SIZE * T_SIZE));
 	i = -1;
 	while (++i < T_SIZE * T_SIZE)
 	{
