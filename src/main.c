@@ -16,6 +16,25 @@
 **	Doesn't actually work for any given sprite sheet right now.
 */
 
+static void		fix_data(t_view *v, int size)
+{
+	unsigned char	*new;
+	int				i;
+	int				j;
+
+	new = (unsigned char*)ft_memalloc(size);
+	i = -1;
+	while (++i < 320)
+	{
+		j = -1;
+		while (++j < 3 * 288)
+			new[(319 - i) * 3 * 288 + j] =
+				v->texture_data[i * 3 * 288 + j];
+	}
+	free(v->texture_data);
+	v->texture_data = new;
+}
+
 static void		gen_textures(t_view *v)
 {
 	FILE			*f;
@@ -26,11 +45,12 @@ static void		gen_textures(t_view *v)
 	f = fopen(T_FILE, "rb");
 	fread(info, sizeof(unsigned char), 54, f);
 	v->width = *(int*)&info[18];
-	v->height = *(int*)&info[22] * -1;
+	v->height = *(int*)&info[22];
 	size = 3 * v->width * v->height;
-	v->texture_data = (unsigned char*)malloc(size);
+	v->texture_data = (unsigned char*)ft_memalloc(size);
 	fread(v->texture_data, 1, size, f);
 	fclose(f);
+	fix_data(v, size);
 	v->textures = (t_color**)malloc(sizeof(t_color*) * 90);
 	i = -1;
 	while (++i < 90)

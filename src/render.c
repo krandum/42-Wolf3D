@@ -43,6 +43,28 @@ static void		draw_stripe(t_view *v, t_render *r)
 	}
 }
 
+static void		set_texnum(t_view *v, t_render *r)
+{
+	uint8_t		adj;
+	int			modx;
+	int			mody;
+
+	modx = 0;
+	mody = 0;
+	if (r->side == 0 && r->raydx > 0)
+		modx = -1;
+	else if (r->side == 0 && r->raydx < 0)
+		modx = 1;
+	else if (r->side == 1 && r->raydy > 0)
+		mody = -1;
+	else
+		mody = 1;
+	adj = v->map[(int)r->mapy + mody][(int)r->mapx + modx];
+	r->texnum = adj - 1;
+	if (r->texnum < 0)
+		r->texnum = 30;
+}
+
 void			render_column(t_view *v, t_render *r)
 {
 	init_points(v, r);
@@ -51,12 +73,12 @@ void			render_column(t_view *v, t_render *r)
 		r->walldist = (r->mapx - r->rayposx + (1 - r->stepx) / 2.0) / r->raydx;
 	else
 		r->walldist = (r->mapy - r->rayposy + (1 - r->stepy) / 2.0) / r->raydy;
-	r->lineheight = (int)(1.5 * W_H / r->walldist);
+	r->lineheight = (int)(1.75 * W_H / r->walldist);
 	r->drawstart = W_H / 2 - r->lineheight / 2;
 	r->drawstart = r->drawstart < 0 ? 0 : r->drawstart;
 	r->drawend = r->lineheight / 2 + W_H / 2;
 	r->drawend = r->drawend > W_H ? W_H : r->drawend;
-	r->texnum = v->map[(int)r->mapx][(int)r->mapy] - 1;
+	set_texnum(v, r);
 	r->wallx = (r->side == 0) ? r->rayposy + r->walldist * r->raydy :
 		r->rayposx + r->walldist * r->raydx;
 	r->wallx -= floor(r->wallx);

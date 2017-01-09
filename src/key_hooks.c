@@ -31,13 +31,13 @@ static void		key_hook_walk(t_view *view)
 
 	if (view->pressed->key_w && !view->pressed->key_s)
 	{
-		P_PX += view->map[(int)(P_PX + P_DX * M_S)][(int)P_PY] ? 0 : P_DX * M_S;
-		P_PY += view->map[(int)P_PX][(int)(P_PY + P_DY * M_S)] ? 0 : P_DY * M_S;
+		P_PX += !view->map[(int)P_PY][(int)(P_PX + P_DX * M_S)] ? 0 : P_DX * M_S;
+		P_PY += !view->map[(int)(P_PY + P_DY * M_S)][(int)P_PX] ? 0 : P_DY * M_S;
 	}
 	else if (view->pressed->key_s && !view->pressed->key_w)
 	{
-		P_PX -= view->map[(int)(P_PX - P_DX * M_S)][(int)P_PY] ? 0 : P_DX * M_S;
-		P_PY -= view->map[(int)P_PX][(int)(P_PY - P_DY * M_S)] ? 0 : P_DY * M_S;
+		P_PX -= !view->map[(int)P_PY][(int)(P_PX - P_DX * M_S)] ? 0 : P_DX * M_S;
+		P_PY -= !view->map[(int)(P_PY - P_DY * M_S)][(int)P_PX] ? 0 : P_DY * M_S;
 	}
 	if (view->pressed->key_a || view->pressed->key_d)
 	{
@@ -62,15 +62,15 @@ static void		key_hook_strafe(t_view *view)
 	{
 		tx = P_DX * cos(M_PI / 2.0) - P_DY * sin(M_PI / 2.0);
 		ty = P_DX * sin(M_PI / 2.0) + P_DY * cos(M_PI / 2.0);
-		P_PX += view->map[(int)(P_PX + tx * M_S)][(int)P_PY] ? 0 : tx * M_S;
-		P_PY += view->map[(int)P_PX][(int)(P_PY + ty * M_S)] ? 0 : ty * M_S;
+		P_PX += !view->map[(int)P_PY][(int)(P_PX + tx * M_S)] ? 0 : tx * M_S;
+		P_PY += !view->map[(int)(P_PY + ty * M_S)][(int)P_PX] ? 0 : ty * M_S;
 	}
 	else if (view->pressed->key_e && !view->pressed->key_q)
 	{
 		tx = P_DX * cos(-M_PI / 2.0) - P_DY * sin(-M_PI / 2.0);
 		ty = P_DX * sin(-M_PI / 2.0) + P_DY * cos(-M_PI / 2.0);
-		P_PX += view->map[(int)(P_PX + tx * M_S)][(int)P_PY] ? 0 : tx * M_S;
-		P_PY += view->map[(int)P_PX][(int)(P_PY + ty * M_S)] ? 0 : ty * M_S;
+		P_PX += !view->map[(int)P_PY][(int)(P_PX + tx * M_S)] ? 0 : tx * M_S;
+		P_PY += !view->map[(int)(P_PY + ty * M_S)][(int)P_PX] ? 0 : ty * M_S;
 	}
 }
 

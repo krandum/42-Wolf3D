@@ -27,9 +27,11 @@ int				check_space(t_view *v, t_point *p0, t_point *p1)
 	int		r;
 	int		c;
 
-	if (p0->r > WIN_HEIGHT || p1->r > WIN_HEIGHT || p1->r < 0 || p0->r < 0)
+	if (p0->r >= MAP_HEIGHT - 1 || p1->r >= MAP_HEIGHT - 1 || p1->r <= 1
+		|| p0->r <= 1)
 		return (0);
-	if (p0->c > WIN_WIDTH || p1->c > WIN_WIDTH || p1->c < 0 || p0->c < 0)
+	if (p0->c >= MAP_WIDTH - 1 || p1->c >= MAP_WIDTH - 1 || p1->c <= 1
+		|| p0->c <= 1)
 		return (0);
 	r = p0->r;
 	while (r <= p1->r)
@@ -58,13 +60,13 @@ int				find_dir(t_view *v, t_point *loc)
 	int		dir;
 
 	dir = 0;
-	if (v->map[loc->r + 1][loc->c] == -1)
+	if (v->map[loc->r + 1][loc->c] > 0)
 		dir += 1;
-	if (v->map[loc->r][loc->c - 1] == -1)
+	if (v->map[loc->r][loc->c - 1] > 0)
 		dir += 2;
-	if (v->map[loc->r - 1][loc->c] == -1)
+	if (v->map[loc->r - 1][loc->c] > 0)
 		dir += 4;
-	if (v->map[loc->r][loc->c + 1] == -1)
+	if (v->map[loc->r][loc->c + 1] > 0)
 		dir += 8;
 	if (dir == 1)
 		return (0);

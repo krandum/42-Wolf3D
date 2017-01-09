@@ -57,16 +57,11 @@ void		draw_floor(t_view *v, t_render *r, t_2dp *floor_w, double weight)
 			v->player->pos->y;
 		f_tex[0] = FL(0);
 		f_tex[1] = FL(1);
-		r->color = v->textures[78][(int)(T_SIZE * f_tex[1] + f_tex[0])];
+		r->color = v->textures[72][(int)(T_SIZE * f_tex[1] + f_tex[0])];
 		darken_floor(v, r);
 		v->pixels[r->y * v->s_line + (r->x * 4)] = r->color;
 		v->pixels[r->y * v->s_line + (r->x * 4) + 1] = r->color >> 8;
 		v->pixels[r->y * v->s_line + (r->x * 4) + 2] = r->color >> 16;
-		r->color = v->textures[2][(int)(T_SIZE * f_tex[1] + f_tex[0])];
-		darken_floor(v, r);
-		v->pixels[(W_H - --r->y) * v->s_line + (r->x * 4)] = r->color;
-		v->pixels[(W_H - r->y) * v->s_line + (r->x * 4) + 1] = r->color >> 8;
-		v->pixels[(W_H - r->y++) * v->s_line + (r->x * 4) + 2] = r->color >> 16;
 	}
 	free(floor_w);
 }
@@ -109,7 +104,7 @@ void		iter(t_view *v, t_render *r)
 			r->mapy += r->stepy;
 			r->side = 1;
 		}
-		if (v->map[(int)r->mapx][(int)r->mapy] > 0)
+		if (v->map[(int)r->mapy][(int)r->mapx] == 0)
 			r->hit = 1;
 	}
 }

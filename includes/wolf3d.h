@@ -35,11 +35,11 @@
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 
-# define MAP_WIDTH 150
-# define MAP_HEIGHT 150
+# define MAP_WIDTH 100
+# define MAP_HEIGHT 100
 
-# define BUILD_NUM 90
-# define ACCESS_NUM 36
+# define BUILD_NUM 60
+# define ACCESS_NUM 20
 # define ROOM_DEN 65
 # define ROOM_MIN 7
 # define ROOM_MAX 14

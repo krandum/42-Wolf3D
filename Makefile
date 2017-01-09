@@ -16,7 +16,7 @@ SRC		= main.c render.c key_hooks.c dungeon.c draw.c rooms.c gen_util.c
 OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -O3
+CFLAGS	= -O3
 
 LIBFT	= ./libft/libft.a
 FTINC	= -I ./libft/
@@ -47,7 +47,7 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 	$(CC) $(CFLAGS) $(FTINC) $(GFXINC) $(MLXINC) -I $(INCDIR) -o $@ -c $<
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) $(FTLINK) $(GFXLINK) $(MLXLINK) -o $(NAME)
+	$(CC) $(OBJ) $(FTLINK) $(GFXLINK) $(MLXLINK) -fsanitize=address -o $(NAME)
 
 libft:
 	make -C ./libft re
