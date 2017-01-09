@@ -35,6 +35,25 @@ static void		fix_data(t_view *v, int size)
 	v->texture_data = new;
 }
 
+static void		fix_fists(t_view *v, int size)
+{
+	unsigned char	*new;
+	int				i;
+	int				j;
+
+	new = (unsigned char*)ft_memalloc(size);
+	i = -1;
+	while (++i < 512)
+	{
+		j = -1;
+		while (++j < 3 * 256)
+			new[(511 - i) * 3 * 256 + j] =
+				v->texture_data[i * 3 * 256 + j];
+	}
+	free(v->texture_data);
+	v->texture_data = new;
+}
+
 static void		gen_textures(t_view *v)
 {
 	FILE			*f;
@@ -55,6 +74,22 @@ static void		gen_textures(t_view *v)
 	i = -1;
 	while (++i < 90)
 		v->textures[i] = ft_get_texture(v, ((i / 9) * 0x6C00) + (i % 9) * 0x60);
+	free(v->texture_data);
+	v->texture_data = 0;
+	f = 0;
+	f = fopen(P_FILE, "rb");
+	fread(info, sizeof(unsigned char), 54, f);
+	v->width = *(int*)&info[18];
+	v->height = *(int*)&info[22];
+	size = 3 * v->width * v->height;
+	v->texture_data = (unsigned char*)ft_memalloc(size);
+	fread(v->texture_data, 1, size, f);
+	fclose(f);
+	fix_fists(v, size);
+	v->fists = (t_color**)malloc(sizeof(t_color*) * 2);
+	i = -1;
+	while (++i < 2)
+		v->fists[i] = ft_get_fist(v, i);
 }
 
 int				exit_hook(t_view *view)

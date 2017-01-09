@@ -25,16 +25,18 @@
 #  include <mach/mach.h>
 # endif
 
-# define WIN_WIDTH 1600
-# define WIN_HEIGHT 1200
+# define WIN_WIDTH 1200
+# define WIN_HEIGHT 900
 
 # define T_SIZE 32
 # define T_FILE "textures/sheet.bmp"
+# define P_FILE "textures/punch.bmp"
 
 # define W_W WIN_WIDTH
 # define W_H WIN_HEIGHT
 
 typedef int			t_color;
+typedef uint8_t		t_byte;
 
 typedef struct		s_2dp
 {
@@ -59,6 +61,7 @@ typedef struct		s_keys
 	uint8_t			key_e:1;
 	uint8_t			key_sh:1;
 	uint8_t			running:1;
+	uint8_t			punching:1;
 }					t_keys;
 
 typedef struct		s_player
@@ -80,6 +83,7 @@ typedef struct		s_view
 	char			*pixels;
 	unsigned char	*texture_data;
 	t_color			**textures;
+	t_color			**fists;
 	t_color			*colors;
 	double			*tab;
 	double			*darkness;
@@ -147,8 +151,10 @@ typedef struct		s_split
 }					t_split;
 
 t_color				*ft_get_texture(t_view *v, int offset);
+t_color				*ft_get_fist(t_view *v, int number);
 void				ft_get_time(struct timespec *ts);
 t_2dp				*ft_get_2d_point(float x, float y);
 void				ft_color_pixel(t_view *v, int x, int y, int iter);
+t_color				ft_color_mult(t_color c, float r);
 
 #endif

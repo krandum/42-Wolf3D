@@ -19,6 +19,10 @@
 # include <fcntl.h>
 # include <sys/time.h>
 
+/*
+** Keycodes
+*/
+
 # define KEY_ESC 53
 
 # define KEY_FRONT 13
@@ -34,6 +38,12 @@
 # define KEY_DOWN 125
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
+
+# define KEY_PUNCH 49
+
+/*
+** Dungeon properties
+*/
 
 # define MAP_WIDTH 150
 # define MAP_HEIGHT 150

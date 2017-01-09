@@ -17,12 +17,8 @@
 
 static void		darken_wall(t_view *v, t_render *r)
 {
-	if (r->lineheight >= W_H)
-		return ;
-	r->red = (r->color >> 16) * (v->darkness[r->lineheight]);
-	r->green = ((r->color >> 8) & 0xFF) * (v->darkness[r->lineheight]);
-	r->blue = (r->color & 0xFF) * (v->darkness[r->lineheight]);
-	r->color = ((int)r->red) << 16 | ((int)r->green) << 8 | (int)r->blue;
+	if (r->lineheight < W_H)
+		r->color = ft_color_mult(r->color, v->darkness[r->lineheight]);
 }
 
 static void		draw_stripe(t_view *v, t_render *r)
@@ -38,7 +34,8 @@ static void		draw_stripe(t_view *v, t_render *r)
 		if (r->color == 0xFF00FF)
 			continue ;
 		r->color = r->side == 1 ? (r->color >> 1) & 0x7F7F7F : r->color;
-		darken_wall(v, r);
+		if (r->lineheight < W_H)
+			r->color = ft_color_mult(r->color, v->darkness[r->lineheight]);
 		v->pixels[r->y * v->s_line + (r->x * 4)] = r->color;
 		v->pixels[r->y * v->s_line + (r->x * 4) + 1] = r->color >> 8;
 		v->pixels[r->y * v->s_line + (r->x * 4) + 2] = r->color >> 16;
@@ -134,6 +131,35 @@ static void		*threaded_artist(void *tmp)
 	return (NULL);
 }
 
+static void		put_fist(t_view *v)
+{
+	int		x;
+	int		y;
+	float	r;
+	float	c;
+	t_color	color;
+
+	r = 0.0;
+	y = WIN_HEIGHT * 2 / 3 - 1;
+	while (++y < WIN_HEIGHT)
+	{
+		c = 0.0;
+		x = WIN_WIDTH / 4 - 1;
+		while (++x < WIN_WIDTH * 3 / 4)
+		{
+			color = v->fists[v->pressed->punching]
+				[256 * (int)r + (int)c];
+			c += 256.0 / (float)(WIN_WIDTH / 2);
+			if (color == 0xFF00FF)
+				continue ;
+			v->pixels[y * v->s_line + (x * 4)] = color;
+			v->pixels[y * v->s_line + (x * 4) + 1] = color >> 8;
+			v->pixels[y * v->s_line + (x * 4) + 2] = color >> 16;
+		}
+		r += 128.0 / (float)(WIN_HEIGHT / 3);
+	}
+}
+
 void			draw_reload(t_view *view)
 {
 	t_split		*splits;
@@ -142,20 +168,21 @@ void			draw_reload(t_view *view)
 	view->img = mlx_new_image(view->id, WIN_WIDTH + 100, W_H + 100);
 	view->pixels = mlx_get_data_addr(view->img, &(view->bits_per_pixel),
 		&(view->s_line), &(view->endian));
-	splits = (t_split*)ft_memalloc(sizeof(t_split) * 5);
+	splits = (t_split*)ft_memalloc(sizeof(t_split) * 15);
 	i = -1;
-	while (++i < 5)
+	while (++i < 15)
 	{
-		splits[i].x_start = (WIN_WIDTH / 5) * i;
-		splits[i].x_end = (WIN_WIDTH / 5) * (i + 1);
+		splits[i].x_start = (WIN_WIDTH / 15) * i;
+		splits[i].x_end = (WIN_WIDTH / 15) * (i + 1);
 		splits[i].render = (t_render*)ft_memalloc(sizeof(t_render));
 		splits[i].view = view;
 		pthread_create(&(splits[i].thread), NULL, threaded_artist,
 			(void*)&splits[i]);
 	}
 	i = -1;
-	while (++i < 5)
+	while (++i < 15)
 		pthread_join(splits[i].thread, NULL);
+	put_fist(view);
 	mlx_put_image_to_window(view->id, view->win, view->img, 0, 0);
 	mlx_destroy_image(view->id, view->img);
 }

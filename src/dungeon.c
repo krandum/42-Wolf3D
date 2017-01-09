@@ -49,7 +49,7 @@ static int		bust_wall_hor(t_view *v, int r, int c)
 	if (v->map[r][c])
 		return (0);
 	c = sc;
-	v->map[r][c] = 1;
+	v->map[r][c] = -3;
 	return (1);
 }
 
@@ -68,7 +68,7 @@ static int		bust_wall_ver(t_view *v, int r, int c)
 	if (v->map[r][c])
 		return (0);
 	r = sr;
-	v->map[r][c] = 1;
+	v->map[r][c] = -3;
 	return (1);
 }
 
