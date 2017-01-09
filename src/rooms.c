@@ -17,7 +17,7 @@
 static int	doorify(t_view *v, t_point *l, int out, int dir)
 {
 	if (out)
-		v->map[l->r][l->c] = 1;
+		v->map[l->r][l->c] = -1;
 	return (out);
 }
 

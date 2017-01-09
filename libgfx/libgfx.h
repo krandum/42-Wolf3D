@@ -94,6 +94,15 @@ typedef struct		s_view
 	long			old_time;
 }					t_view;
 
+typedef struct		s_door
+{
+	int				mapx;
+	int				mapy;
+	int				side;
+	double			sidedistx;
+	double			sidedisty;
+}					t_door;
+
 typedef struct		s_render
 {
 	double			rayposx;
@@ -125,6 +134,7 @@ typedef struct		s_render
 	float			green;
 	float			blue;
 	t_color			color;
+	t_door			*found_door;
 }					t_render;
 
 typedef struct		s_split

@@ -104,7 +104,17 @@ void		iter(t_view *v, t_render *r)
 			r->mapy += r->stepy;
 			r->side = 1;
 		}
-		if (v->map[(int)r->mapy][(int)r->mapx] == 0)
+		if (v->map[(int)r->mapy][(int)r->mapx] == 0
+			|| (r->found_door && v->map[(int)r->mapy][(int)r->mapx] < 0))
 			r->hit = 1;
+		if (v->map[(int)r->mapy][(int)r->mapx] < 0 && r->found_door == 0)
+		{
+			r->found_door = (t_door*)ft_memalloc(sizeof(t_door));
+			r->found_door->mapx = r->mapx;
+			r->found_door->mapy = r->mapy;
+			r->found_door->side = r->side;
+			r->found_door->sidedistx = r->sidedistx;
+			r->found_door->sidedisty = r->sidedisty;
+		}
 	}
 }

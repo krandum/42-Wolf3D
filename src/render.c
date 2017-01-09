@@ -35,6 +35,8 @@ static void		draw_stripe(t_view *v, t_render *r)
 		d = r->y * 0x100 - W_H * 0x80 + r->lineheight * 0x80;
 		r->texy = ((d * T_SIZE) / r->lineheight) / 0x100;
 		r->color = v->textures[r->texnum][T_SIZE * r->texy + r->texx];
+		if (r->color == 0xFF00FF)
+			continue ;
 		r->color = r->side == 1 ? (r->color >> 1) & 0x7F7F7F : r->color;
 		darken_wall(v, r);
 		v->pixels[r->y * v->s_line + (r->x * 4)] = r->color;
@@ -45,7 +47,7 @@ static void		draw_stripe(t_view *v, t_render *r)
 
 static void		set_texnum(t_view *v, t_render *r)
 {
-	uint8_t		adj;
+	int			adj;
 	int			modx;
 	int			mody;
 
@@ -62,7 +64,9 @@ static void		set_texnum(t_view *v, t_render *r)
 	adj = v->map[(int)r->mapy + mody][(int)r->mapx + modx];
 	r->texnum = adj - 1;
 	if (r->texnum < 0)
-		r->texnum = 30;
+		r->texnum = 0;
+	if (v->map[(int)r->mapy][(int)r->mapx] < 0)
+		r->texnum += -9 * v->map[(int)r->mapy][(int)r->mapx];
 }
 
 void			render_column(t_view *v, t_render *r)
@@ -87,6 +91,31 @@ void			render_column(t_view *v, t_render *r)
 		r->texx = T_SIZE - r->texx - 1;
 	draw_stripe(v, r);
 	draw_floor(v, r, NULL, 0.0);
+	if (r->found_door)
+	{
+		r->mapx = r->found_door->mapx;
+		r->mapy = r->found_door->mapy;
+		r->side = r->found_door->side;
+		if (r->side == 0)
+			r->walldist = (r->mapx - r->rayposx + (1 - r->stepx) / 2.0) / r->raydx;
+		else
+			r->walldist = (r->mapy - r->rayposy + (1 - r->stepy) / 2.0) / r->raydy;
+		r->lineheight = (int)(1.75 * W_H / r->walldist);
+		r->drawstart = W_H / 2 - r->lineheight / 2;
+		r->drawstart = r->drawstart < 0 ? 0 : r->drawstart;
+		r->drawend = r->lineheight / 2 + W_H / 2;
+		r->drawend = r->drawend > W_H ? W_H : r->drawend;
+		set_texnum(v, r);
+		r->wallx = (r->side == 0) ? r->rayposy + r->walldist * r->raydy :
+			r->rayposx + r->walldist * r->raydx;
+		r->wallx -= floor(r->wallx);
+		r->texx = (int)(r->wallx * (double)T_SIZE);
+		if ((r->side == 0 && r->raydx > 0) || (r->side == 1 && r->raydy < 0))
+			r->texx = T_SIZE - r->texx - 1;
+		draw_stripe(v, r);
+		free(r->found_door);
+		r->found_door = 0;
+	}
 }
 
 static void		*threaded_artist(void *tmp)
@@ -113,19 +142,19 @@ void			draw_reload(t_view *view)
 	view->img = mlx_new_image(view->id, WIN_WIDTH + 100, W_H + 100);
 	view->pixels = mlx_get_data_addr(view->img, &(view->bits_per_pixel),
 		&(view->s_line), &(view->endian));
-	splits = (t_split*)ft_memalloc(sizeof(t_split) * 4);
+	splits = (t_split*)ft_memalloc(sizeof(t_split) * 5);
 	i = -1;
-	while (++i < 4)
+	while (++i < 5)
 	{
-		splits[i].x_start = (WIN_WIDTH / 4) * i;
-		splits[i].x_end = (WIN_WIDTH / 4) * (i + 1);
+		splits[i].x_start = (WIN_WIDTH / 5) * i;
+		splits[i].x_end = (WIN_WIDTH / 5) * (i + 1);
 		splits[i].render = (t_render*)ft_memalloc(sizeof(t_render));
 		splits[i].view = view;
 		pthread_create(&(splits[i].thread), NULL, threaded_artist,
 			(void*)&splits[i]);
 	}
 	i = -1;
-	while (++i < 4)
+	while (++i < 5)
 		pthread_join(splits[i].thread, NULL);
 	mlx_put_image_to_window(view->id, view->win, view->img, 0, 0);
 	mlx_destroy_image(view->id, view->img);
