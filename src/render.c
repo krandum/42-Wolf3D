@@ -74,7 +74,7 @@ void			render_column(t_view *v, t_render *r)
 		r->walldist = (r->mapx - r->rayposx + (1 - r->stepx) / 2.0) / r->raydx;
 	else
 		r->walldist = (r->mapy - r->rayposy + (1 - r->stepy) / 2.0) / r->raydy;
-	r->lineheight = (int)(1.75 * W_H / r->walldist);
+	r->lineheight = (int)(2.0 * W_H / r->walldist);
 	r->drawstart = W_H / 2 - r->lineheight / 2;
 	r->drawstart = r->drawstart < 0 ? 0 : r->drawstart;
 	r->drawend = r->lineheight / 2 + W_H / 2;
@@ -97,7 +97,7 @@ void			render_column(t_view *v, t_render *r)
 			r->walldist = (r->mapx - r->rayposx + (1 - r->stepx) / 2.0) / r->raydx;
 		else
 			r->walldist = (r->mapy - r->rayposy + (1 - r->stepy) / 2.0) / r->raydy;
-		r->lineheight = (int)(1.75 * W_H / r->walldist);
+		r->lineheight = (int)(2.0 * W_H / r->walldist);
 		r->drawstart = W_H / 2 - r->lineheight / 2;
 		r->drawstart = r->drawstart < 0 ? 0 : r->drawstart;
 		r->drawend = r->lineheight / 2 + W_H / 2;
@@ -112,6 +112,7 @@ void			render_column(t_view *v, t_render *r)
 		draw_stripe(v, r);
 		free(r->found_door);
 		r->found_door = 0;
+		draw_floor(v, r, NULL, 0.0);
 	}
 }
 

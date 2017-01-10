@@ -25,7 +25,7 @@ static void		get_ready(t_view *v)
 	y = -1;
 	while (++y < WIN_HEIGHT)
 	{
-		v->tab[y] = 1.75 * WIN_HEIGHT / (2.0 * y - WIN_HEIGHT);
+		v->tab[y] = 2.0 * WIN_HEIGHT / (2.0 * y - WIN_HEIGHT);
 		v->darkness[y] = MAX(0, MIN(1, (double)y / (double)WIN_HEIGHT) + 0.15);
 	}
 	v->pressed = (t_keys*)ft_memalloc(sizeof(t_keys));
