@@ -36,7 +36,7 @@ OBJDIR	= ./obj/
 
 .PHONY: full libft libmlx libgfx regfx re clean rclean fclean rfclean
 
-all: obj $(NAME)
+all: full
 
 full: obj libft libgfx libmlx $(NAME)
 
