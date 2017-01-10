@@ -189,8 +189,8 @@ int				generic_hook(t_view *view)
 	frame_time = (double)(view->cur_time - view->old_time) / 1000000000.0;
 	if (frame_time > 0)
 	{
-		view->player->mov_speed = frame_time * 3.7;
-		view->player->rot_speed = (double)M_PI * frame_time / 1.25;
+		view->player->mov_speed = frame_time * 4.7;
+		view->player->rot_speed = (double)M_PI * frame_time / 1.0;
 	}
 	if (view->pressed->key_sh)
 	{

@@ -31,7 +31,6 @@
 # define T_SIZE 32
 # define T_FILE "textures/sheet.bmp"
 # define P_FILE "textures/punch.bmp"
-# define W_FILE "sounds/woosh.mp3"
 
 # define W_W WIN_WIDTH
 # define W_H WIN_HEIGHT
@@ -62,7 +61,7 @@ typedef struct		s_keys
 	uint8_t			key_e:1;
 	uint8_t			key_sh:1;
 	uint8_t			running:1;
-	uint8_t			punching:1;
+	uint8_t			punching:2;
 }					t_keys;
 
 typedef struct		s_player

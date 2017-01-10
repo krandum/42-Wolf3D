@@ -86,9 +86,9 @@ static void		gen_textures(t_view *v)
 	fread(v->texture_data, 1, size, f);
 	fclose(f);
 	fix_fists(v, size);
-	v->fists = (t_color**)malloc(sizeof(t_color*) * 2);
+	v->fists = (t_color**)malloc(sizeof(t_color*) * 4);
 	i = -1;
-	while (++i < 2)
+	while (++i < 4)
 		v->fists[i] = ft_get_fist(v, i);
 }
 

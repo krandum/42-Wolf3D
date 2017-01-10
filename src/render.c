@@ -33,7 +33,6 @@ static void		draw_stripe(t_view *v, t_render *r)
 		r->color = v->textures[r->texnum][T_SIZE * r->texy + r->texx];
 		if (r->color == 0xFF00FF)
 			continue ;
-		r->color = r->side == 1 ? (r->color >> 1) & 0x7F7F7F : r->color;
 		if (r->lineheight < W_H)
 			r->color = ft_color_mult(r->color, v->darkness[r->lineheight]);
 		v->pixels[r->y * v->s_line + (r->x * 4)] = r->color;
@@ -41,6 +40,9 @@ static void		draw_stripe(t_view *v, t_render *r)
 		v->pixels[r->y * v->s_line + (r->x * 4) + 2] = r->color >> 16;
 	}
 }
+
+#define P_DX v->player->dir->x
+#define P_DY v->player->dir->y
 
 static void		set_texnum(t_view *v, t_render *r)
 {
@@ -61,7 +63,15 @@ static void		set_texnum(t_view *v, t_render *r)
 	adj = v->map[(int)r->mapy + mody][(int)r->mapx + modx];
 	r->texnum = adj - 1;
 	if (r->texnum < 0)
-		r->texnum = 0;
+	{
+		if (v->map[(int)r->mapy + mody + (P_DY > 0 ? 1 : -1)]
+			[(int)r->mapx + modx] > 0)
+			r->texnum = v->map[(int)r->mapy + mody + (P_DY > 0 ? 1 : -1)]
+				[(int)r->mapx + modx] - 1;
+		else
+			r->texnum = v->map[(int)r->mapy + mody]
+				[(int)r->mapx + modx + (P_DX > 0 ? 1 : -1)] - 1;
+	}
 	if (v->map[(int)r->mapy][(int)r->mapx] < 0)
 		r->texnum += -9 * v->map[(int)r->mapy][(int)r->mapx];
 }
@@ -159,6 +169,8 @@ static void		put_fist(t_view *v)
 		}
 		r += 128.0 / (float)(WIN_HEIGHT / 3);
 	}
+	if (v->pressed->punching < 3 && v->pressed->punching)
+		v->pressed->punching++;
 }
 
 void			draw_reload(t_view *view)
