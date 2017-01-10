@@ -31,6 +31,7 @@
 # define T_SIZE 32
 # define T_FILE "textures/sheet.bmp"
 # define P_FILE "textures/punch.bmp"
+# define W_FILE "sounds/woosh.mp3"
 
 # define W_W WIN_WIDTH
 # define W_H WIN_HEIGHT

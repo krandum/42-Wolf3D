@@ -75,7 +75,7 @@ rfclean: rclean
 	make -C ./libft fclean
 	make -C ./libgfx fclean
 
-re: fclean all
+re: fclean obj $(NAME)
 
 f: libgfx re
 	./$(NAME)

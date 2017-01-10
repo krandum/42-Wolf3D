@@ -110,25 +110,35 @@ int				key_pressed_hook(int keycode, t_view *view)
 		view->pressed->key_sh = 1;
 	else if (keycode == KEY_PUNCH)
 	{
+		system("afplay sounds/woosh.mp3 &");
 		view->pressed->punching = 1;
 		if (view->map[(int)(P_PY + round(P_DY * 3 + 0.1))]
 			[(int)(P_PX + round(P_DX * 3 + 0.1))] < 0 &&
 			view->map[(int)(P_PY + round(P_DY * 3 + 0.1))]
 			[(int)(P_PX + round(P_DX * 3 + 0.1))] >= -2)
+		{
 			view->map[(int)(P_PY + round(P_DY * 3 + 0.1))]
 				[(int)(P_PX + round(P_DX * 3 + 0.1))]--;
-		if (view->map[(int)(P_PY + round(P_DY * 2 + 0.1))]
+			system("afplay sounds/bomb.mp3 &");
+		}
+		else if (view->map[(int)(P_PY + round(P_DY * 2 + 0.1))]
 			[(int)(P_PX + round(P_DX * 2 + 0.1))] < 0 &&
 			view->map[(int)(P_PY + round(P_DY * 2 + 0.1))]
 			[(int)(P_PX + round(P_DX * 2 + 0.1))] >= -2)
+		{
 			view->map[(int)(P_PY + round(P_DY * 2 + 0.1))]
 				[(int)(P_PX + round(P_DX * 2 + 0.1))]--;
-		if (view->map[(int)(P_PY + round(P_DY + 0.1))]
+			system("afplay sounds/bomb.mp3 &");
+		}
+		else if (view->map[(int)(P_PY + round(P_DY + 0.1))]
 			[(int)(P_PX + round(P_DX + 0.1))] < 0 &&
 			view->map[(int)(P_PY + round(P_DY + 0.1))]
 			[(int)(P_PX + round(P_DX + 0.1))] >= -2)
+		{
 			view->map[(int)(P_PY + round(P_DY + 0.1))]
 				[(int)(P_PX + round(P_DX + 0.1))]--;
+			system("afplay sounds/bomb.mp3 &");
+		}
 	}
 	if (!view->pressed->running && view->pressed->key_sh &&
 		view->pressed->key_w)
