@@ -115,7 +115,7 @@ static int		gen_something(t_view *view, t_point *p)
 	int		picker;
 
 	picker = rand() % 100 + 1;
-	if (picker < BUILD_NUM)
+	if (picker < ROOM_DEN)
 		return (gen_room(view, p));
 	else
 		return (gen_corr(view, p));
