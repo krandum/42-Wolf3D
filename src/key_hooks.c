@@ -32,25 +32,25 @@ static void		key_hook_walk(t_view *view)
 	if (view->pressed->key_w && !view->pressed->key_s)
 	{
 		if (view->map[(int)P_PY][(int)(P_PX + P_DX * M_S
-			+ (P_DX > 0 ? 0.075 : -0.075))] > 0 ||
+			+ (P_DX > 0 ? 0.175 : -0.175))] > 0 ||
 			view->map[(int)P_PY][(int)(P_PX + P_DX * M_S
-			+ (P_DX > 0 ? 0.075 : -0.075))] < -2)
+			+ (P_DX > 0 ? 0.175 : -0.175))] < -2)
 			P_PX += P_DX * M_S;
-		if (view->map[(int)(P_PY + P_DY * M_S + (P_DY > 0 ? 0.075 : -0.075))]
+		if (view->map[(int)(P_PY + P_DY * M_S + (P_DY > 0 ? 0.175 : -0.175))]
 			[(int)P_PX] > 0 || view->map[(int)(P_PY + P_DY * M_S
-			+ (P_DY > 0 ? 0.075 : -0.075))][(int)P_PX] < -2)
+			+ (P_DY > 0 ? 0.175 : -0.175))][(int)P_PX] < -2)
 			P_PY += P_DY * M_S;
 	}
 	else if (view->pressed->key_s && !view->pressed->key_w)
 	{
 		if (view->map[(int)P_PY][(int)(P_PX - P_DX * M_S
-			- (P_DX > 0 ? 0.075 : -0.075))] > 0 ||
+			- (P_DX > 0 ? 0.175 : -0.175))] > 0 ||
 			view->map[(int)P_PY][(int)(P_PX - P_DX * M_S
-			- (P_DX > 0 ? 0.075 : -0.075))] < -2)
+			- (P_DX > 0 ? 0.175 : -0.175))] < -2)
 			P_PX -= P_DX * M_S;
-		if (view->map[(int)(P_PY - P_DY * M_S - (P_DY > 0 ? 0.075 : -0.075))]
+		if (view->map[(int)(P_PY - P_DY * M_S - (P_DY > 0 ? 0.175 : -0.175))]
 			[(int)P_PX] > 0 || view->map[(int)(P_PY - P_DY * M_S
-			- (P_DY > 0 ? 0.075 : -0.075))][(int)P_PX] < -2)
+			- (P_DY > 0 ? 0.175 : -0.175))][(int)P_PX] < -2)
 			P_PY -= P_DY * M_S;
 	}
 	if (view->pressed->key_a || view->pressed->key_d)
@@ -77,13 +77,13 @@ static void		key_hook_strafe(t_view *view)
 		tx = P_DX * cos(M_PI / 2.0) - P_DY * sin(M_PI / 2.0);
 		ty = P_DX * sin(M_PI / 2.0) + P_DY * cos(M_PI / 2.0);
 		if (view->map[(int)P_PY][(int)(P_PX + tx * M_S
-			+ (tx > 0 ? 0.075 : -0.075))] > 0 ||
+			+ (tx > 0 ? 0.175 : -0.175))] > 0 ||
 			view->map[(int)P_PY][(int)(P_PX + tx * M_S
-			+ (tx > 0 ? 0.075 : -0.075))] < -2)
+			+ (tx > 0 ? 0.175 : -0.175))] < -2)
 			P_PX += tx * M_S;
-		if (view->map[(int)(P_PY + ty * M_S + (ty > 0 ? 0.075 : -0.075))]
+		if (view->map[(int)(P_PY + ty * M_S + (ty > 0 ? 0.175 : -0.175))]
 			[(int)P_PX] > 0 || view->map[(int)(P_PY + ty * M_S
-			+ (ty > 0 ? 0.075 : -0.075))][(int)P_PX] < -2)
+			+ (ty > 0 ? 0.175 : -0.175))][(int)P_PX] < -2)
 			P_PY += ty * M_S;
 	}
 	else if (view->pressed->key_e && !view->pressed->key_q)
@@ -91,13 +91,13 @@ static void		key_hook_strafe(t_view *view)
 		tx = P_DX * cos(-M_PI / 2.0) - P_DY * sin(-M_PI / 2.0);
 		ty = P_DX * sin(-M_PI / 2.0) + P_DY * cos(-M_PI / 2.0);
 		if (view->map[(int)P_PY][(int)(P_PX + tx * M_S
-			+ (tx > 0 ? 0.075 : -0.075))] > 0 ||
+			+ (tx > 0 ? 0.175 : -0.175))] > 0 ||
 			view->map[(int)P_PY][(int)(P_PX + tx * M_S
-			+ (tx > 0 ? 0.075 : -0.075))] < -2)
+			+ (tx > 0 ? 0.175 : -0.175))] < -2)
 			P_PX += tx * M_S;
-		if (view->map[(int)(P_PY + ty * M_S + (ty > 0 ? 0.075 : -0.075))]
+		if (view->map[(int)(P_PY + ty * M_S + (ty > 0 ? 0.175 : -0.175))]
 			[(int)P_PX] > 0 || view->map[(int)(P_PY + ty * M_S
-			+ (ty > 0 ? 0.075 : -0.075))][(int)P_PX] < -2)
+			+ (ty > 0 ? 0.175 : -0.175))][(int)P_PX] < -2)
 			P_PY += ty * M_S;
 	}
 }
@@ -124,31 +124,88 @@ int				key_pressed_hook(int keycode, t_view *view)
 	{
 		system("afplay sounds/woosh.mp3 &");
 		view->pressed->punching = 1;
-		if (view->map[(int)(P_PY + round(P_DY + 0.1))]
-			[(int)(P_PX + round(P_DX + 0.1))] < 0 &&
-			view->map[(int)(P_PY + round(P_DY + 0.1))]
-			[(int)(P_PX + round(P_DX + 0.1))] >= -2)
+		if (view->map[(int)(P_PY + round(P_DY * 0.5))]
+			[(int)(P_PX + round(P_DX * 0.5))] < 0 &&
+			view->map[(int)(P_PY + round(P_DY * 0.5))]
+			[(int)(P_PX + round(P_DX * 0.5))] >= -2)
 		{
-			view->map[(int)(P_PY + round(P_DY + 0.1))]
-				[(int)(P_PX + round(P_DX + 0.1))]--;
+			view->map[(int)(P_PY + round(P_DY * 0.5))]
+				[(int)(P_PX + round(P_DX * 0.5))]--;
 			system("afplay sounds/bomb.mp3 &");
 		}
-		else if (view->map[(int)(P_PY + round(P_DY * 2 + 0.1))]
-			[(int)(P_PX + round(P_DX * 2 + 0.1))] < 0 &&
-			view->map[(int)(P_PY + round(P_DY * 2 + 0.1))]
-			[(int)(P_PX + round(P_DX * 2 + 0.1))] >= -2)
+		else if (view->map[(int)(P_PY + round(P_DY))]
+			[(int)(P_PX + round(P_DX))] < 0 &&
+			view->map[(int)(P_PY + round(P_DY))]
+			[(int)(P_PX + round(P_DX))] >= -2 &&
+			view->map[(int)(P_PY + round(P_DY * 0.5))]
+			[(int)(P_PX + round(P_DX * 0.5))] > 0)
 		{
-			view->map[(int)(P_PY + round(P_DY * 2 + 0.1))]
-				[(int)(P_PX + round(P_DX * 2 + 0.1))]--;
+			view->map[(int)(P_PY + round(P_DY))]
+				[(int)(P_PX + round(P_DX))]--;
 			system("afplay sounds/bomb.mp3 &");
 		}
-		else if (view->map[(int)(P_PY + round(P_DY * 3 + 0.1))]
-			[(int)(P_PX + round(P_DX * 3 + 0.1))] < 0 &&
-			view->map[(int)(P_PY + round(P_DY * 3 + 0.1))]
-			[(int)(P_PX + round(P_DX * 3 + 0.1))] >= -2)
+		else if (view->map[(int)(P_PY + round(P_DY * 1.5))]
+			[(int)(P_PX + round(P_DX * 1.5))] < 0 &&
+			view->map[(int)(P_PY + round(P_DY * 1.5))]
+			[(int)(P_PX + round(P_DX * 1.5))] >= -2 &&
+			view->map[(int)(P_PY + round(P_DY * 0.5))]
+			[(int)(P_PX + round(P_DX * 0.5))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY))]
+			[(int)(P_PX + round(P_DX))] > 0)
 		{
-			view->map[(int)(P_PY + round(P_DY * 3 + 0.1))]
-				[(int)(P_PX + round(P_DX * 3 + 0.1))]--;
+			view->map[(int)(P_PY + round(P_DY * 1.5))]
+				[(int)(P_PX + round(P_DX * 1.5))]--;
+			system("afplay sounds/bomb.mp3 &");
+		}
+		else if (view->map[(int)(P_PY + round(P_DY * 2))]
+			[(int)(P_PX + round(P_DX * 2))] < 0 &&
+			view->map[(int)(P_PY + round(P_DY * 2))]
+			[(int)(P_PX + round(P_DX * 2))] >= -2 &&
+			view->map[(int)(P_PY + round(P_DY * 0.5))]
+			[(int)(P_PX + round(P_DX * 0.5))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY))]
+			[(int)(P_PX + round(P_DX))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY * 1.5))]
+			[(int)(P_PX + round(P_DX * 1.5))] > 0)
+		{
+			view->map[(int)(P_PY + round(P_DY * 2))]
+				[(int)(P_PX + round(P_DX * 2))]--;
+			system("afplay sounds/bomb.mp3 &");
+		}
+		else if (view->map[(int)(P_PY + round(P_DY * 2.5))]
+			[(int)(P_PX + round(P_DX * 2.5))] < 0 &&
+			view->map[(int)(P_PY + round(P_DY * 2.5))]
+			[(int)(P_PX + round(P_DX * 2.5))] >= -2 &&
+			view->map[(int)(P_PY + round(P_DY * 0.5))]
+			[(int)(P_PX + round(P_DX * 0.5))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY))]
+			[(int)(P_PX + round(P_DX))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY * 1.5))]
+			[(int)(P_PX + round(P_DX * 1.5))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY * 2))]
+			[(int)(P_PX + round(P_DX * 2))] > 0)
+		{
+			view->map[(int)(P_PY + round(P_DY * 2.5))]
+				[(int)(P_PX + round(P_DX * 2.5))]--;
+			system("afplay sounds/bomb.mp3 &");
+		}
+		else if (view->map[(int)(P_PY + round(P_DY * 3))]
+			[(int)(P_PX + round(P_DX * 3))] < 0 &&
+			view->map[(int)(P_PY + round(P_DY * 3))]
+			[(int)(P_PX + round(P_DX * 3))] >= -2 &&
+			view->map[(int)(P_PY + round(P_DY * 0.5))]
+			[(int)(P_PX + round(P_DX * 0.5))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY))]
+			[(int)(P_PX + round(P_DX))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY * 1.5))]
+			[(int)(P_PX + round(P_DX * 1.5))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY * 2))]
+			[(int)(P_PX + round(P_DX * 2))] > 0 &&
+			view->map[(int)(P_PY + round(P_DY * 2.5))]
+			[(int)(P_PX + round(P_DX * 2.5))] > 0)
+		{
+			view->map[(int)(P_PY + round(P_DY * 3))]
+				[(int)(P_PX + round(P_DX * 3))]--;
 			system("afplay sounds/bomb.mp3 &");
 		}
 	}

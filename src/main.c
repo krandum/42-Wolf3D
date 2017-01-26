@@ -95,6 +95,7 @@ static void		gen_textures(t_view *v)
 int				exit_hook(t_view *view)
 {
 	mlx_destroy_window(view->id, view->win);
+	view->running = 0;
 	exit(0);
 }
 
@@ -117,8 +118,8 @@ int				main(void)
 	view = (t_view*)malloc(sizeof(t_view));
 	printf("LOADING...\n");
 	view->player = (t_player*)malloc(sizeof(t_player));
-	view->player->pos = ft_get_2d_point(MAP_HEIGHT / 2 + 0.01,
-		MAP_WIDTH / 2 + 0.01);
+	view->player->pos = ft_get_2d_point(MAP_WIDTH / 2 + 0.01,
+		MAP_HEIGHT / 2 + 0.01);
 	view->player->dir = ft_get_2d_point(1.0, 0.0);
 	view->player->cam = ft_get_2d_point(0.0, -0.6666666);
 	printf("\t-Player coordinates set...\n");

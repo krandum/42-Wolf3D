@@ -20,6 +20,14 @@ static void		get_ready(t_view *v)
 	v->tab = (double*)ft_memalloc(sizeof(double) * WIN_HEIGHT);
 	v->darkness = (double*)ft_memalloc(sizeof(double) * WIN_HEIGHT);
 	v->map = (char**)ft_memalloc(sizeof(char*) * MAP_HEIGHT);
+	v->zbuffer = (double*)ft_memalloc(sizeof(double) * WIN_WIDTH);
+	v->sprites = (t_sprite*)ft_memalloc(sizeof(t_sprite) * 2);
+	v->sprites[0].x = MAP_WIDTH / 2 + 2.01;
+	v->sprites[0].y = MAP_HEIGHT / 2 + 2.01;
+	v->sprites[0].texnum = 93;
+	v->sprites[1].x = MAP_WIDTH / 2 - 2.01;
+	v->sprites[1].y = MAP_HEIGHT / 2 - 2.01;
+	v->sprites[1].texnum = 93;
 	while (++y < MAP_HEIGHT)
 		v->map[y] = (char*)ft_memalloc(sizeof(char) * MAP_WIDTH);
 	y = -1;
@@ -30,6 +38,7 @@ static void		get_ready(t_view *v)
 	}
 	v->pressed = (t_keys*)ft_memalloc(sizeof(t_keys));
 	v->cur_time = 0;
+	v->running = 1;
 	make_starting_room(v);
 	srand(time(NULL));
 }

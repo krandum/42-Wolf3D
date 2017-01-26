@@ -43,37 +43,13 @@ void		draw_floor(t_view *v, t_render *r, t_2dp *floor_w, double weight)
 {
 	double	cur_floor[2];
 	int		f_tex[2];
-	int		dist;
 	int		texnum;
 	int		modx;
 	int		mody;
 	int		prev;
 
-	modx = 0;
-	mody = 0;
-	if (r->side == 0 && r->raydx > 0)
-		modx = -1;
-	else if (r->side == 0 && r->raydx < 0)
-		modx = 1;
-	else if (r->side == 1 && r->raydy > 0)
-		mody = -1;
-	else
-		mody = 1;
-	texnum = v->map[(int)r->mapy + mody][(int)r->mapx + modx];
-	if (texnum < 0)
-	{
-		if (v->map[(int)r->mapy + mody + (P_DY > 0 ? 1 : -1)]
-			[(int)r->mapx + modx] > 0)
-			texnum = v->map[(int)r->mapy + mody + (P_DY > 0 ? 1 : -1)]
-				[(int)r->mapx + modx];
-		else
-			texnum = v->map[(int)r->mapy + mody]
-				[(int)r->mapx + modx + (P_DX > 0 ? 1 : -1)];
-	}
-	texnum += 35;
 	init_floor(r, &floor_w);
-	f_tex[0] = r->raydx > 0 ? T_SIZE : 0;
-	f_tex[1] = r->raydy > 0 ? T_SIZE : 0;
+	texnum = -42;
 	while (++(r->y) < W_H)
 	{
 		weight = v->tab[r->y] / r->walldist;
@@ -81,8 +57,27 @@ void		draw_floor(t_view *v, t_render *r, t_2dp *floor_w, double weight)
 			v->player->pos->x;
 		cur_floor[1] = weight * floor_w->y + (1.0 - weight) *
 			v->player->pos->y;
+		if (texnum == -42)
+		{
+			if (v->map[(int)cur_floor[1] + (P_DY > 0 ? 1 : -1)]
+				[(int)cur_floor[0]] > 0)
+				texnum = v->map[(int)cur_floor[1] + (P_DY > 0 ? 1 : -1)]
+					[(int)cur_floor[0]] + 35;
+			else if (v->map[(int)cur_floor[1]]
+				[(int)cur_floor[0] + (P_DX > 0 ? 1 : -1)] > 0)
+				texnum = v->map[(int)cur_floor[1]]
+					[(int)cur_floor[0] + (P_DX > 0 ? 1 : -1)] + 35;
+			else
+				texnum = 35;
+		}
 		f_tex[0] = FL(0);
 		f_tex[1] = FL(1);
+		prev = texnum;
+		texnum = v->map[(int)cur_floor[1]][(int)cur_floor[0]] + 35;
+		if (texnum < 35)
+		{
+			texnum = prev;
+		}
 		r->color = v->textures[texnum][(int)(T_SIZE * f_tex[1] + f_tex[0])];
 		r->color = ft_color_mult(r->color, 1.0 / v->tab[r->y]);
 		v->pixels[r->y * v->s_line + (r->x * 4)] = r->color;

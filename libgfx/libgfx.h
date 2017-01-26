@@ -73,14 +73,23 @@ typedef struct		s_player
 	double			rot_speed;
 }					t_player;
 
+typedef struct		s_sprite
+{
+	float			x;
+	float			y;
+	int				texnum;
+}					t_sprite;
+
 typedef struct		s_view
 {
 	void			*id;
 	void			*win;
 	void			*img;
 	t_player		*player;
+	t_sprite		*sprites;
 	t_keys			*pressed;
 	char			*pixels;
+	double			*zbuffer;
 	unsigned char	*texture_data;
 	t_color			**textures;
 	t_color			**fists;
@@ -96,6 +105,12 @@ typedef struct		s_view
 	int				endian;
 	long			cur_time;
 	long			old_time;
+	pthread_mutex_t	mutex;
+	pthread_cond_t	signal_cond;
+	pthread_cond_t	done_cond;
+	int				signal;
+	int				running_threads;
+	int				running;
 }					t_view;
 
 typedef struct		s_door

@@ -72,6 +72,8 @@ static void		set_texnum(t_view *v, t_render *r)
 			r->texnum = v->map[(int)r->mapy + mody]
 				[(int)r->mapx + modx + (P_DX > 0 ? 1 : -1)] - 1;
 	}
+	if (r->texnum < 0)
+		r->texnum = 8;
 	if (v->map[(int)r->mapy][(int)r->mapx] < 0)
 		r->texnum += -9 * v->map[(int)r->mapy][(int)r->mapx];
 }
@@ -97,6 +99,7 @@ void			render_column(t_view *v, t_render *r)
 	if ((r->side == 0 && r->raydx > 0) || (r->side == 1 && r->raydy < 0))
 		r->texx = T_SIZE - r->texx - 1;
 	draw_stripe(v, r);
+	v->zbuffer[r->x] = r->walldist;
 	draw_floor(v, r, NULL, 0.0);
 	if (r->found_door)
 	{
@@ -122,7 +125,6 @@ void			render_column(t_view *v, t_render *r)
 		draw_stripe(v, r);
 		free(r->found_door);
 		r->found_door = 0;
-		draw_floor(v, r, NULL, 0.0);
 	}
 }
 
@@ -132,11 +134,26 @@ static void		*threaded_artist(void *tmp)
 	t_split		*s;
 
 	s = (t_split*)tmp;
-	x = s->x_start - 1;
-	while (++x < s->x_end)
+	pthread_mutex_lock(&s->view->mutex);
+	pthread_cond_wait(&s->view->signal_cond, &s->view->mutex);
+	pthread_mutex_unlock(&s->view->mutex);
+	while (s->view->running)
 	{
-		s->render->x = x;
-		render_column(s->view, s->render);
+		ft_bzero(s->render, sizeof(t_render));
+		x = s->x_start - 1;
+		while (++x < s->x_end)
+		{
+			s->render->x = x;
+			render_column(s->view, s->render);
+		}
+		pthread_mutex_lock(&s->view->mutex);
+		s->view->running_threads--;
+		if (s->view->running_threads == 0)
+			pthread_cond_signal(&s->view->done_cond);
+		pthread_mutex_unlock(&s->view->mutex);
+		pthread_mutex_lock(&s->view->mutex);
+		pthread_cond_wait(&s->view->signal_cond, &s->view->mutex);
+		pthread_mutex_unlock(&s->view->mutex);
 	}
 	free(s->render);
 	return (NULL);
@@ -175,26 +192,38 @@ static void		put_fist(t_view *v)
 
 void			draw_reload(t_view *view)
 {
-	t_split		*splits;
-	int			i;
+	static t_split	*splits = 0;
+	int				i;
 
 	view->img = mlx_new_image(view->id, WIN_WIDTH + 100, W_H + 100);
 	view->pixels = mlx_get_data_addr(view->img, &(view->bits_per_pixel),
 		&(view->s_line), &(view->endian));
-	splits = (t_split*)ft_memalloc(sizeof(t_split) * 15);
-	i = -1;
-	while (++i < 15)
+	if (!splits)
 	{
-		splits[i].x_start = (WIN_WIDTH / 15) * i;
-		splits[i].x_end = (WIN_WIDTH / 15) * (i + 1);
-		splits[i].render = (t_render*)ft_memalloc(sizeof(t_render));
-		splits[i].view = view;
-		pthread_create(&(splits[i].thread), NULL, threaded_artist,
-			(void*)&splits[i]);
+		splits = (t_split*)ft_memalloc(sizeof(t_split) * 20);
+		i = -1;
+		pthread_mutex_init(&view->mutex, NULL);
+		pthread_cond_init(&view->signal_cond, NULL);
+		pthread_cond_init(&view->done_cond, NULL);
+		view->running_threads = 20;
+		while (++i < 20)
+		{
+			splits[i].x_start = (WIN_WIDTH / 20) * i;
+			splits[i].x_end = (WIN_WIDTH / 20) * (i + 1);
+			splits[i].render = (t_render*)malloc(sizeof(t_render));
+			splits[i].view = view;
+			pthread_create(&(splits[i].thread), NULL, threaded_artist,
+				(void*)&splits[i]);
+		}
+		sleep(0);
 	}
-	i = -1;
-	while (++i < 15)
-		pthread_join(splits[i].thread, NULL);
+	pthread_mutex_lock(&view->mutex);
+	view->running_threads = 20;
+	pthread_cond_broadcast(&view->signal_cond);
+	pthread_mutex_unlock(&view->mutex);
+	pthread_mutex_lock(&view->mutex);
+	pthread_cond_wait(&view->done_cond, &view->mutex);
+	pthread_mutex_unlock(&view->mutex);
 	put_fist(view);
 	mlx_put_image_to_window(view->id, view->win, view->img, 0, 0);
 	mlx_destroy_image(view->id, view->img);

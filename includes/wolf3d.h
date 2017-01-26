@@ -45,15 +45,15 @@
 ** Dungeon properties
 */
 
-# define MAP_WIDTH 150
-# define MAP_HEIGHT 150
+# define MAP_WIDTH 175
+# define MAP_HEIGHT 175
 
 # define BUILD_NUM 90
-# define ACCESS_NUM 20
-# define ROOM_DEN 65
+# define ACCESS_NUM 15
+# define ROOM_DEN 80
 # define ROOM_MIN 7
-# define ROOM_MAX 14
-# define CORR_MIN 6
+# define ROOM_MAX 12
+# define CORR_MIN 5
 # define CORR_MAX 12
 
 typedef struct	s_point

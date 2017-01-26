@@ -14,7 +14,7 @@
 
 #define C(x) (i == 0 || i == p1->x - p0->x)
 
-static int	doorify(t_view *v, t_point *l, int out, int dir)
+static int	doorify(t_view *v, t_point *l, int out)
 {
 	if (out)
 		v->map[l->r][l->c] = -1;
@@ -68,7 +68,7 @@ int			gen_room(t_view *v, t_point *l)
 	else
 		return (0);
 	double_free(p0, p1);
-	return (doorify(v, l, out, dir));
+	return (doorify(v, l, out));
 }
 
 int			gen_corr(t_view *v, t_point *l)
@@ -96,7 +96,7 @@ int			gen_corr(t_view *v, t_point *l)
 	else
 		return (0);
 	double_free(p0, p1);
-	return (doorify(v, l, out, dir));
+	return (doorify(v, l, out));
 }
 
 void		make_starting_room(t_view *v)
